@@ -6,7 +6,7 @@ layout: "page"
 
 ## Hi, I'm Changxiu Ji (Leo) 👋
 
-I'm a CS student with deep interests in **AI**, **ML systems**, and **quantitative research**.
+I'm a Math & CS student at **Stanford**, interested in **Test-Time Learning Systems** and **Multi-Agent Systems**.
 
 This blog — Leo's Hotpot 🍲 — is where I share ideas, research findings, and things I find worth thinking about. Like a good hotpot: mixed, spicy, and hopefully interesting.
 

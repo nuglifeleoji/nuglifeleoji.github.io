@@ -7,7 +7,7 @@ paginate = 10
 [params]
   env = "production"
   title = "Leo's Hotpot"
-  description = "CS student · Interested in AI, ML systems, and quantitative research"
+  description = "Math & CS @ Stanford · Interested in Test-Time Learning Systems and Multi-Agent Systems"
   keywords = ["AI", "ML", "Research", "Blog"]
   author = "Changxiu Ji"
   defaultTheme = "dark"
@@ -23,7 +23,7 @@ paginate = 10
   [params.profileMode]
     enabled = true
     title = "Changxiu Ji"
-    subtitle = "CS student · Interested in AI, ML systems, and quantitative research · Building things that matter"
+    subtitle = "Math & CS @ Stanford · Interested in Test-Time Learning Systems and Multi-Agent Systems"
     imageUrl = ""
     imageWidth = 120
     imageHeight = 120
