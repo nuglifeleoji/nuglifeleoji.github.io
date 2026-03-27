@@ -1,0 +1,103 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="800" height="400" viewBox="0 0 800 400">
+  <defs>
+    <linearGradient id="greenBar" x1="0%" y1="100%" x2="0%" y2="0%">
+      <stop offset="0%" style="stop-color:#51cf66;stop-opacity:0.85" />
+      <stop offset="100%" style="stop-color:#40b855;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="redBar" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#ff6b6b;stop-opacity:0.85" />
+      <stop offset="100%" style="stop-color:#e05555;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+
+  <!-- Background -->
+  <rect width="800" height="400" fill="#1a1a1a"/>
+
+  <!-- Title -->
+  <text x="400" y="36" font-family="system-ui,-apple-system,sans-serif" font-size="18" font-weight="700" fill="#e0e0e0" text-anchor="middle">Test-Time Compute: Easy vs Hard Problems</text>
+
+  <!-- Chart area setup:
+       y=60 (top of chart), y=310 (zero line), chart height=250px
+       x=120 (left), x=680 (right)
+       Max positive: +30%, max negative: -55%
+       Total range: 85%
+       Scale: 250px / 85% ≈ 2.94px per %
+       Zero line at y=310
+       +27% → 310 - (27*2.94) = 310 - 79.4 ≈ 230
+       +21% → 310 - (21*2.94) = 310 - 61.7 ≈ 248
+       -24% → 310 + (24*2.94) = 310 + 70.6 ≈ 381 → but chart bottom is 360
+       Let's use: total chart height = 290, zero at y=310, scale 290/85 ≈ 3.41px/%
+       +27% → 310 - 92 = 218
+       +21% → 310 - 72 = 238
+       -24% → 310 + 82 = 392 (too much)
+       Better: scale by visual fit. Zero at y=280, positive up to y=80 (200px = 30%), negative to y=360 (80px = ~23%)
+       Actually let's just pick round numbers:
+       Zero line: y=255
+       Positive region height: 155px for 30% → 5.17px/%
+       Negative region height: 100px for 52% → 1.92px/%
+       That's not uniform. Let uniform scale: 1% = 3px, zero at y=255
+       +27% → 255 - 81 = 174 (bar top)
+       +21% → 255 - 63 = 192 (bar top)
+       -24% → 255 + 72 = 327 (bar bottom)
+       -52% → 255 + 156 = 411 — too tall. Chart would need to be taller.
+       Use 2px per %, zero at y=240
+       +27% → 240 - 54 = 186
+       +21% → 240 - 42 = 198
+       -24% → 240 + 48 = 288
+       -52% → 240 + 104 = 344 — fits in 400px
+  -->
+
+  <!-- Zero baseline -->
+  <line x1="100" y1="240" x2="700" y2="240" stroke="#888" stroke-width="1.5" stroke-dasharray="4,3"/>
+  <text x="90" y="244" font-family="system-ui,-apple-system,sans-serif" font-size="12" fill="#888" text-anchor="end">0%</text>
+
+  <!-- Y-axis labels positive -->
+  <text x="90" y="186" font-family="system-ui,-apple-system,sans-serif" font-size="11" fill="#51cf66" text-anchor="end">+27%</text>
+  <line x1="96" y1="186" x2="100" y2="186" stroke="#333" stroke-width="1"/>
+  <text x="90" y="198" font-family="system-ui,-apple-system,sans-serif" font-size="11" fill="#51cf66" text-anchor="end">+21%</text>
+  <line x1="96" y1="198" x2="100" y2="198" stroke="#333" stroke-width="1"/>
+
+  <!-- Y-axis labels negative -->
+  <text x="90" y="288" font-family="system-ui,-apple-system,sans-serif" font-size="11" fill="#ff6b6b" text-anchor="end">-24%</text>
+  <line x1="96" y1="288" x2="100" y2="288" stroke="#333" stroke-width="1"/>
+  <text x="90" y="344" font-family="system-ui,-apple-system,sans-serif" font-size="11" fill="#ff6b6b" text-anchor="end">-52%</text>
+  <line x1="96" y1="344" x2="100" y2="344" stroke="#333" stroke-width="1"/>
+
+  <!-- Easy problems group label -->
+  <text x="270" y="75" font-family="system-ui,-apple-system,sans-serif" font-size="15" font-weight="600" fill="#51cf66" text-anchor="middle">Easy Problems</text>
+  <text x="270" y="92" font-family="system-ui,-apple-system,sans-serif" font-size="12" fill="#777" text-anchor="middle">TTC yields positive returns</text>
+
+  <!-- Easy bar 1: +27% — from y=186 to y=240, height=54 -->
+  <rect x="160" y="186" width="70" height="54" rx="4" fill="url(#greenBar)"/>
+  <text x="195" y="178" font-family="system-ui,-apple-system,sans-serif" font-size="13" font-weight="700" fill="#51cf66" text-anchor="middle">+27%</text>
+  <text x="195" y="260" font-family="system-ui,-apple-system,sans-serif" font-size="11" fill="#aaa" text-anchor="middle">Method A</text>
+
+  <!-- Easy bar 2: +21% — from y=198 to y=240, height=42 -->
+  <rect x="260" y="198" width="70" height="42" rx="4" fill="url(#greenBar)" opacity="0.8"/>
+  <text x="295" y="190" font-family="system-ui,-apple-system,sans-serif" font-size="13" font-weight="700" fill="#51cf66" text-anchor="middle">+21%</text>
+  <text x="295" y="260" font-family="system-ui,-apple-system,sans-serif" font-size="11" fill="#aaa" text-anchor="middle">Method B</text>
+
+  <!-- Divider -->
+  <line x1="400" y1="80" x2="400" y2="370" stroke="#333" stroke-width="1" stroke-dasharray="6,4"/>
+
+  <!-- Hard problems group label -->
+  <text x="560" y="75" font-family="system-ui,-apple-system,sans-serif" font-size="15" font-weight="600" fill="#ff6b6b" text-anchor="middle">Hard Problems</text>
+  <text x="560" y="92" font-family="system-ui,-apple-system,sans-serif" font-size="12" fill="#777" text-anchor="middle">TTC yields negative returns</text>
+
+  <!-- Hard bar 1: -24% — from y=240 to y=288, height=48 -->
+  <rect x="450" y="240" width="70" height="48" rx="4" fill="url(#redBar)"/>
+  <text x="485" y="306" font-family="system-ui,-apple-system,sans-serif" font-size="13" font-weight="700" fill="#ff6b6b" text-anchor="middle">-24%</text>
+  <text x="485" y="260" font-family="system-ui,-apple-system,sans-serif" font-size="11" fill="#444" text-anchor="middle">Method A</text>
+
+  <!-- Hard bar 2: -52% — from y=240 to y=344, height=104 -->
+  <rect x="550" y="240" width="70" height="104" rx="4" fill="url(#redBar)" opacity="0.9"/>
+  <text x="585" y="362" font-family="system-ui,-apple-system,sans-serif" font-size="13" font-weight="700" fill="#ff6b6b" text-anchor="middle">-52%</text>
+  <text x="585" y="260" font-family="system-ui,-apple-system,sans-serif" font-size="11" fill="#444" text-anchor="middle">Method B</text>
+
+  <!-- Annotation: verifier degrades -->
+  <text x="560" y="320" font-family="system-ui,-apple-system,sans-serif" font-size="11" fill="#ff6b6b" text-anchor="middle" font-style="italic">verifier signal degrades</text>
+  <text x="560" y="335" font-family="system-ui,-apple-system,sans-serif" font-size="11" fill="#ff6b6b" text-anchor="middle" font-style="italic">on hard problems</text>
+
+  <!-- Source label -->
+  <text x="400" y="390" font-family="system-ui,-apple-system,sans-serif" font-size="11" fill="#555" text-anchor="middle">Source: ICLR 2025 · UC Berkeley &amp; DeepMind — Scaling LLM Test-Time Compute Optimally</text>
+</svg>
