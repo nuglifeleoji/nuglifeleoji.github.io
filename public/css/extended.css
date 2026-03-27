@@ -1,0 +1,52 @@
+/* Leo's Hotpot - Custom Styles */
+
+/* Profile mode: dark background with amber accent */
+:root {
+  --primary: #f59e0b;
+  --secondary: #6b7280;
+}
+
+.dark {
+  --primary: #f59e0b;
+  --theme: #0d1117;
+  --entry: #161b22;
+  --primary: #f59e0b;
+  --border: #30363d;
+}
+
+/* Profile avatar placeholder - initials circle */
+.profile-mode .profile_inner img {
+  border-radius: 50%;
+  border: 2px solid var(--primary);
+}
+
+/* Post cards */
+.post-entry {
+  border-radius: 8px;
+  transition: transform 0.15s ease;
+}
+
+.post-entry:hover {
+  transform: translateY(-2px);
+}
+
+/* Reading time + date style */
+.post-meta {
+  font-size: 0.82rem;
+  opacity: 0.7;
+}
+
+/* Code blocks */
+.highlight {
+  border-radius: 6px;
+}
+
+/* Amber accent on links */
+a:hover {
+  color: var(--primary);
+}
+
+/* Nav bar */
+.nav a:hover {
+  color: var(--primary);
+}
