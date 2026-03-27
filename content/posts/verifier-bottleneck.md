@@ -6,6 +6,10 @@ tags: ["multi-agent systems", "test-time compute", "verification", "AI research"
 categories: ["research"]
 description: "MAST's 1600-trace autopsy reveals that multi-agent failures cluster around verification, not agent capability. This same wall is what limits test-time compute scaling. Here's the unified framework."
 draft: false
+cover:
+  image: "/images/verifier-bottleneck-cover.svg"
+  alt: "The Verifier Bottleneck"
+  relative: false
 ---
 
 > **TL;DR**
@@ -29,6 +33,8 @@ The MAST paper (NeurIPS 2025 Spotlight), which conducted one of the most rigorou
 | FC1: Specification & System Design | 37.17% |
 | FC2: Inter-Agent Misalignment | 31.41% |
 | FC3: Task Verification & Termination | 31.41% |
+
+![MAST Failure Distribution](/images/mast-failures.svg)
 
 FC3 is the one that should stop you cold. **Nearly a third of all multi-agent failures have nothing to do with whether agents can reason or communicate — they fail because the system cannot correctly determine whether the task is done, or whether it was done correctly.** FM-3.1 (Premature Termination) alone accounts for 13.61% of all failures. FM-3.2 (No or Incomplete Verification) is categorized as "very common" in the paper's taxonomy.
 
@@ -66,6 +72,8 @@ The ICLR 2025 paper on test-time compute (TTC) scaling from UC Berkeley and Deep
 - **Hard questions**: TTC yields -24% to -52% relative improvement
 
 Test-time compute *hurts* on hard problems. Not marginally. Substantially. The key variable identified: the ratio of inference tokens to pretraining tokens.
+
+![TTC Scaling Performance](/images/ttc-scaling.svg)
 
 Why would more compute hurt? The mechanism is exactly the verifier bottleneck in a different costume. TTC methods — beam search, MCTS, self-consistency, process reward models — all rely on some signal to guide the search. On easy problems, that signal (correctness heuristics, outcome reward models, self-evaluation) is reliable. On hard problems, the verifier degrades: the model cannot reliably distinguish a correct intermediate step from a plausible-but-wrong one. More compute then means more confidently wrong exploration of a bad search tree.
 
@@ -118,6 +126,8 @@ If the verifier bottleneck hypothesis is correct — and I think the convergent 
 ### 1. Verifier Independence Is Non-Negotiable
 
 The most immediate practical implication: **verification should never be done by the same model that did the generation, especially for non-trivial tasks.** This seems obvious in retrospect, but most current MAS architectures violate it. LLM-as-judge with the same base model, self-critique loops, and orchestrators that use the same frontier model as their workers all suffer from correlated failure modes.
+
+![Verifier Architecture Comparison](/images/verifier-arch.svg)
 
 What does independent verification look like? Symbolic verification where possible (unit tests, type checkers, formal verifiers). Diverse model ensembles with different pretraining corpora. Human-in-the-loop for high-stakes subtask boundaries. Process reward models trained specifically on verification, not generation.
 
