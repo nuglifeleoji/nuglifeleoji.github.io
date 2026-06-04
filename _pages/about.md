@@ -2,11 +2,10 @@
 layout: about
 title: about
 permalink: /
-subtitle: Stanford undergraduate in Mathematics and Computer Science. Agentic AI systems, LLM infrastructure, and long-context reasoning.
-
+subtitle: 
 profile:
   align: right
-  image: prof_pic.jpeg
+  image: leo_profile.jpeg
   image_circular: true # crops the image to make it circular
   more_info: >
     <p>Stanford University</p>
@@ -33,8 +32,6 @@ I am currently researching in the Stanford Pervasive Parallelism Lab. I have bee
 
 Previously, I have interned in Algovant, where I researched on multi-agent systems specialized for option-market analysis, and Apx labs, where I researched on multi-agent systems that can achieve desktop automation and capture the users intention through ui interactions. I have also have the honor to intern in Deepseek focusing on sparse attention as well as participating in the Tencent Spark Research Program focusing on long-context understanding using multi-agent systems. 
 
-
-Before Stanford, I graduated from Shenzhen Middle School, where I ranked 1st in a class of 1900.
-I have also competed in programming, mathematics, and machine learning, including USACO Platinum, and Kaggle Master.
+Previously, I graduated from Shenzhen Middle School, and in high school I have competed and won several gold medals in Math Olympiads and Computing Olympiads. 
 
 Pure math also fascinates me. 
