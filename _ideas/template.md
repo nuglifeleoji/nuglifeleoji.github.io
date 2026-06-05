@@ -1,15 +1,8 @@
 ---
-title: "Idea Title"
-description: "One sentence summary shown on the Ideas index."
+title: "About Benchmarks"
+description: ""
 date: 2026-06-05
 published: false
 ---
 
-Write the full idea here.
-
-Use normal Markdown:
-
-- short notes
-- links
-- equations
-- sections
+I was really interested in a so called Turtle Soup game. It's a game where you find out a detective story by asking questions and you are only gonna receive either yes or no. 
