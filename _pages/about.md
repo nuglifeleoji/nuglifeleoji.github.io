@@ -32,4 +32,6 @@ Previously, I interned at Algovant, working on multi-agent systems for options-m
 
 Before Stanford, I graduated from Shenzhen Middle School, where I competed in mathematics and programming olympiads and received several gold medals. I am also deeply interested in pure mathematics, including the Hopf fibration, convex optimization, Galois theory, and chaotic maps with symbolic dynamics. I attended the Stanford Mathematics Camp in 2023 and 2024, studying abstract algebra and algebraic topology.
 
-Outside of research, I am an Inter Milan fan and enjoy playing Battlegrounds. Feel free to reach out.
+Outside of research, I am an Inter Milan fan and enjoy playing Battlegrounds. I also like Cantonese food like char siu and dim sum!
+
+Feel free to [reach out](mailto:leo0610@stanford.edu) if you want to collaborate with me.
