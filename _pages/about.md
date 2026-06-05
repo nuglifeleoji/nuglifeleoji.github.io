@@ -26,7 +26,7 @@ latest_posts:
   limit: 3 # leave blank to include all the blog posts
 ---
 
-I am an undergraduate at Stanford University majoring in Mathematics and Computer Science, advised by Professor Kunle Olukotun. I am currently a researcher in the [Stanford Pervasive Parallelism Lab](https://ppl.stanford.edu/), where I study test-time agentic systems. My work focuses on curriculum curation for self-evolving agents, parallel execution in self-evolving agent frameworks, and understanding the failure modes of self-evolving agents and how to mitigate them.
+I am an undergraduate at Stanford University majoring in Mathematics and Computer Science, advised by ][Professor Kunle Olukotun](https://engineering.stanford.edu/people/oyekunle-olukotun). I am currently a researcher in the [Stanford Pervasive Parallelism Lab](https://ppl.stanford.edu/), where I study test-time agentic systems. My work focuses on curriculum design and parallel execution for self-evolving frameworks like ACE and GEPA, as well as understanding the failure modes of these self-evolving agents and how to mitigate them.
 
 Previously, I interned at Algovant, working on multi-agent systems for options-market analysis, and at Apx Labs, where I studied multi-agent systems for desktop automation and user-intent understanding through UI interactions. I also interned at DeepSeek, focusing on sparse attention, and participated in the Tencent Spark Research Program, where I worked on long-context understanding with multi-agent systems. And this summer, I am fortunate to intern at Scientech Research LLC as a quantitative developer! 
 
