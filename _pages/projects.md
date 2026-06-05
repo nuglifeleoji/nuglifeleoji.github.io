@@ -14,6 +14,11 @@ I discover that many self-evolving context updates contain contents like Verifie
 
 I was really interested in machine unlearning in vision, and I tested whether models really forget correlations after unlearning them? Can I restore them back by some simple operations in the latent space? Are there any methods to increase unlearning robustness. Our CS 231N final project, ART(Association Restoration Test) answers them all!
 
+##[Job Recommendation System](https://github.com/nuglifeleoji/Job-Recommendation-System)
+
+I was so bored but I want to practice my Java skills and learn some MySQL and Redis. This project is way better than competing USACO with Java!
+
+
 ##[Woody](https://github.com/nuglifeleoji/Stanford-Helper-Function)
 
 **Stanford Life Recommendation App**  
