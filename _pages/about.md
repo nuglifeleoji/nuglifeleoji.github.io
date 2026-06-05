@@ -26,7 +26,7 @@ latest_posts:
   limit: 3 # leave blank to include all the blog posts
 ---
 
-I am an undergraduate at Stanford University majoring in Mathematics and Computer Science, advised by [Professor Kunle Olukotun](https://engineering.stanford.edu/people/oyekunle-olukotun). I am currently a researcher in the [Stanford Pervasive Parallelism Lab](https://ppl.stanford.edu/), where I study test-time agentic systems. My work focuses on [curriculum design](https://openreview.net/forum?id=TRQLuxgxBN) and [parallel execution](https://arxiv.org/abs/2604.04247) for self-evolving frameworks like GEPA, as well as understanding the failure modes of these self-evolving agents and how to mitigate them (releasing paper this month!). I am also a contributor of agentic context engineering(ACE)(https://github.com/ace-agent/ace).
+I am an undergraduate at Stanford University majoring in Mathematics and Computer Science, advised by [Professor Kunle Olukotun](https://engineering.stanford.edu/people/oyekunle-olukotun). I am currently a researcher in the [Stanford Pervasive Parallelism Lab](https://ppl.stanford.edu/), where I study test-time agentic systems. My work focuses on [curriculum design](https://openreview.net/forum?id=TRQLuxgxBN) and [parallel execution](https://arxiv.org/abs/2604.04247) for self-evolving frameworks like GEPA, understanding the failure modes of these self-evolving agents and how to mitigate them (releasing paper this month!), and autoresearch. I am also a contributor of agentic context engineering(ACE)(https://github.com/ace-agent/ace).
 
 I believe the next generation of self-evolving agents will not be built by optimizing harness or weights in isolation. Instead, they will jointly evolve: the harness adapt quickly to local tasks, failures, and environments, while the weights consolidate repeated experience into more general reasoning capabilities. I think one of the central challenges is to design agents that can manage this division of labor—deciding what should remain as transient context, what should be encoded into the harness, and what should be internalized into the model itself.
 
@@ -34,6 +34,6 @@ Previously, I interned at [Algovant](https://www.linkedin.com/company/algovantin
 
 Before Stanford, I graduated from [Shenzhen Middle School](https://en.wikipedia.org/wiki/Shenzhen_Middle_School), where I competed in national level mathematics and programming olympiads and received several gold medals. I am also deeply interested in pure mathematics, including the Hopf fibration, convex optimization, Galois theory, and chaotic maps with symbolic dynamics. I attended the [Stanford Mathematics Camp(SUMaC)](https://sumac.spcs.stanford.edu/) in 2023 and 2024, studying abstract algebra and algebraic topology.
 
-Outside of research, I am an Inter Milan fan and enjoy playing Battlegrounds. I also like Cantonese food like char siu and dim sum!
+Outside of research, I spent my freetime teaching my Codex to win kaggle competitions(three gold medals so far lmao). I am an Inter Milan fan and enjoy playing Battlegrounds by Heartstone. I also like Cantonese food like char siu and dim sum!
 
 Feel free to [reach out](mailto:leo0610@stanford.edu) if you want to collaborate with me.
