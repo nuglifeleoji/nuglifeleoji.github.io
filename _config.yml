@@ -181,6 +181,9 @@ collections:
     defaults:
       layout: post
     output: true
+  ideas:
+    output: true
+    permalink: /ideas/:name/
   projects:
     output: true
   teachings:
@@ -283,6 +286,11 @@ defaults:
       path: "assets"
     values:
       sitemap: false
+  - scope:
+      path: ""
+      type: "ideas"
+    values:
+      layout: page
 
 sass:
   style: compressed
