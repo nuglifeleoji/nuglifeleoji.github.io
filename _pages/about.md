@@ -26,12 +26,10 @@ latest_posts:
   limit: 3 # leave blank to include all the blog posts
 ---
 
-Hi, I am **Changxiu (Leo) Ji**, an undergraduate at Stanford University majoring in Mathematics and Computer Science, advised by Professor Kunle Olukotun. My research interests center around test-time agentic systems.
+I am an undergraduate at Stanford University majoring in Mathematics and Computer Science, advised by Professor Kunle Olukotun. I am currently a researcher in the [Stanford Pervasive Parallelism Lab](https://ppl.stanford.edu/), where I study test-time agentic systems. My work focuses on curriculum curation for self-evolving agents, parallel execution in self-evolving agent frameworks, and understanding the failure modes of self-evolving agents and how to mitigate them.
 
-I am currently researching in the Stanford Pervasive Parallelism Lab. I have been focusing on the curriculum curation for self-evolving agents, the parallelism of self-evolving agent frameworks, as well as why do self-evolving agents fail and how do we mitigate them.
+Previously, I interned at Algovant, working on multi-agent systems for options-market analysis, and at Apx Labs, where I studied multi-agent systems for desktop automation and user-intent understanding through UI interactions. I also interned at DeepSeek, focusing on sparse attention, and participated in the Tencent Spark Research Program, where I worked on long-context understanding with multi-agent systems. And this summer, I am fortunate to intern at Scientech Research LLC as a quantitative developer! 
 
-Previously, I have interned in Algovant, where I researched on multi-agent systems specialized for option-market analysis, and Apx labs, where I researched on multi-agent systems that can achieve desktop automation and capture the users intention through ui interactions. I have also have the honor to intern in Deepseek focusing on sparse attention as well as participating in the Tencent Spark Research Program focusing on long-context understanding using multi-agent systems.
+Before Stanford, I graduated from Shenzhen Middle School, where I competed in mathematics and programming olympiads and received several gold medals. I am also deeply interested in pure mathematics, including the Hopf fibration, convex optimization, Galois theory, and chaotic maps with symbolic dynamics. I attended the Stanford Mathematics Camp in 2023 and 2024, studying abstract algebra and algebraic topology.
 
-Previously, I graduated from Shenzhen Middle School, and in high school I have competed and won several gold medals in Math Olympiads and Computing Olympiads.
-
-Pure math also fascinates me. Some interesting things I have dived deep into: Hopf Fibration, Convex optimization, Galois Theory, and Chaotic Maps with Symbolic Dynamics.
+Outside of research, I am an Inter Milan fan and enjoy playing Battlegrounds. Feel free to reach out.
