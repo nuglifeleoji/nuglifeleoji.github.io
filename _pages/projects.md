@@ -27,5 +27,8 @@ nav_order: 3
 
 5. [Cue](https://github.com/nuggyleo/Calhacks-ai_video_editor)
 
-  Calhacks winning project, Cue allows you to edit videos by simply talking to it!
+   Calhacks winning project, Cue allows you to edit videos by simply talking to it!
 
+6. [Reciper](https://github.com/nuglifeleoji/AI-Recipe-Assistant-Reciper-Mobile)
+
+   AdventureX 2025 winning project, Your Personal AI Nutrition Assistant.
