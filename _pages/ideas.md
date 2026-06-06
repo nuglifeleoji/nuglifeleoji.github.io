@@ -3,7 +3,7 @@ layout: page
 title: Ideas
 permalink: /ideas/
 description:
-nav: true
+nav: false
 nav_order: 4
 ---
 
