@@ -24,3 +24,8 @@ nav_order: 3
    **Stanford Life Recommendation App**
 
    I was so tired of checking dining hall dishes and social events, so I vibed a Swift app.
+
+5. [Cue](https://github.com/nuggyleo/Calhacks-ai_video_editor)
+
+  Calhacks winning project, Cue allows you to edit videos by simply talking to it!
+
