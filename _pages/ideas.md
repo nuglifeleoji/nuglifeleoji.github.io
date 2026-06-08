@@ -5,6 +5,7 @@ permalink: /ideas/
 description:
 nav: false
 nav_order: 4
+sitemap: false
 ---
 
 {% assign ideas = site.ideas | sort: "date" | reverse %}

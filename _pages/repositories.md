@@ -5,6 +5,7 @@ title: repositories
 description: GitHub profile and selected repositories.
 nav: false
 nav_order: 5
+sitemap: false
 ---
 
 {% if site.data.repositories.github_users %}

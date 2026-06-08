@@ -4,6 +4,7 @@ permalink: /cv/
 title: CV
 nav: false
 nav_order: 5
+sitemap: false
 cv_pdf: # you can also use external links here
 cv_format: rendercv # options: rendercv, jsonresume
 description: Education, research experience, projects, technical skills, and awards.
