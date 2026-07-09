@@ -1,6 +1,0 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" role="img" aria-label="Cardinal S favicon">
-  <rect width="128" height="128" rx="24" fill="#8C1515"/>
-  <path d="M78 18C65 21 57 31 57 45v5H42c-14 0-24 9-24 23 0 13 9 22 23 22h30c7 0 11 3 11 9 0 5-4 8-11 8H24v-18h45c4 0 6-1 6-4s-2-4-6-4H40c-17 0-29-11-29-27 0-17 12-28 30-28h8c3-19 18-33 39-37z" fill="#FFFFFF" opacity="0.96"/>
-  <path d="M82 24c-10 8-15 18-15 31v15h15V55c0-10 4-18 12-24z" fill="#2E7D32"/>
-  <path d="M83 37l12 18h-8l10 17H84l-2 27h-9l2-27H63l10-17h-8l11-18z" fill="#2E7D32"/>
-</svg>

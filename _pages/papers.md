@@ -1,6 +1,6 @@
 ---
 layout: page
-title: Recent Papers
+title: Research
 permalink: /papers/
 description:
 nav: true
@@ -32,21 +32,21 @@ nav_order: 2
   }
 
   .paper-entry {
-    font-size: 1.12rem;
-    line-height: 1.34;
+    font-size: 1rem;
+    line-height: 1.35;
   }
 
   .paper-title {
     color: #563f88;
-    font-size: 1.35rem;
+    font-size: 1.12rem;
     font-weight: 700;
-    line-height: 1.2;
+    line-height: 1.25;
     margin-bottom: 0.2rem;
   }
 
   .paper-authors {
     color: var(--global-text-color);
-    font-size: 1.08rem;
+    font-size: 1rem;
     margin-bottom: 0.24rem;
   }
 
@@ -55,20 +55,20 @@ nav_order: 2
   }
 
   .paper-venue {
-    font-size: 1.02rem;
+    font-size: 0.98rem;
     font-style: italic;
     margin-bottom: 0.12rem;
   }
 
   .paper-note {
     color: #b23a3a;
-    font-size: 1.02rem;
+    font-size: 0.98rem;
     font-weight: 700;
     margin-bottom: 0.1rem;
   }
 
   .paper-links {
-    font-size: 1rem;
+    font-size: 0.98rem;
   }
 
   .paper-links a::before {
