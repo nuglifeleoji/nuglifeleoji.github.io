@@ -7,3 +7,15 @@
 
 "Vision":
   color: "#009f36"
+
+"COLM":
+  url: https://colmweb.org/
+  color: "#1f6feb"
+
+"ICLR RSI":
+  url: https://recursive-workshop.github.io/
+  color: "#6f42c1"
+
+"arXiv":
+  url: https://arxiv.org/
+  color: "#b31b1b"
