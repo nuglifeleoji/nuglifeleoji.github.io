@@ -1,6 +1,6 @@
 ---
 layout: page
-title: papers
+title: Recent Papers
 permalink: /papers/
 description:
 nav: true
@@ -8,14 +8,27 @@ nav_order: 2
 ---
 
 <style>
-  .publications ol.bibliography {
+  ol.bibliography {
     list-style: none;
+    list-style-type: none;
     margin: 0;
     padding: 0;
   }
 
-  .publications ol.bibliography li {
+  ol.bibliography li {
+    display: block;
+    list-style: none;
+    list-style-type: none;
     margin: 0 0 2rem;
+  }
+
+  ol.bibliography li::marker {
+    content: "";
+  }
+
+  ol.bibliography li::before {
+    content: none;
+    display: none;
   }
 
   .paper-entry {
@@ -48,8 +61,9 @@ nav_order: 2
   }
 
   .paper-note {
-    color: var(--global-text-color);
-    font-size: 0.95rem;
+    color: #b23a3a;
+    font-size: 1.02rem;
+    font-weight: 700;
     margin-bottom: 0.1rem;
   }
 

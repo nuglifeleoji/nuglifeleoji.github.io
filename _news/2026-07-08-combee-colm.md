@@ -6,4 +6,4 @@ related_posts: false
 sitemap: false
 ---
 
-Combee was accepted to COLM 2026.
+[One paper](/papers/#li2026combee) accepted to the 2026 Conference on Language Modeling (COLM 2026).

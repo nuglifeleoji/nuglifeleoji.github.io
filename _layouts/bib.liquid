@@ -37,9 +37,13 @@
 
   <div class="paper-venue">
     {%- assign venue_text = venue | strip -%}
+    {%- assign venue_includes_year = false -%}
+    {%- if entry.year and venue_text contains entry.year -%}
+      {%- assign venue_includes_year = true -%}
+    {%- endif -%}
     {%- if venue_text != '' -%}
       {{ venue_text -}}
-      {%- if entry.year %}, {{ entry.year }}{% endif -%}
+      {%- if entry.year and venue_includes_year == false %}, {{ entry.year }}{% endif -%}
     {%- elsif entry.year -%}
       {{ entry.year }}
     {%- endif -%}
