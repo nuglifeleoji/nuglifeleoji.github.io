@@ -7,6 +7,56 @@ nav: true
 nav_order: 3
 ---
 
+<style>
+  .projects-page ol {
+    list-style: none;
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  .projects-page ol > li {
+    display: block;
+    font-size: 1rem;
+    line-height: 1.35;
+    list-style: none;
+    list-style-type: none;
+    margin: 0 0 1.6rem;
+  }
+
+  .projects-page ol > li::marker {
+    content: "";
+  }
+
+  .projects-page ol > li::before {
+    content: none;
+    display: none;
+  }
+
+  .projects-page ol > li > p:first-child {
+    margin-bottom: 0.2rem;
+  }
+
+  .projects-page ol > li > p:first-child a {
+    color: #563f88;
+    font-size: 1.12rem;
+    font-weight: 700;
+    line-height: 1.25;
+    text-decoration: none;
+  }
+
+  .projects-page ol > li > p:first-child a:hover {
+    color: #563f88;
+    text-decoration: underline;
+  }
+
+  .projects-page ol > li p {
+    margin-bottom: 0.35rem;
+  }
+</style>
+
+<div class="projects-page" markdown="1">
+
 1. [Sentry](https://github.com/nuglifeleoji/Sentry)
 
    I discover that many self-evolving context updates contain contents like Verifie Smth before smth or Don't do smth, this will make the agent more conservative in interactive tasks. So why not keep these guidance to solve agentic failures outside the agent's main context? Then here comes this CS 229 research project!
@@ -36,3 +86,5 @@ nav_order: 3
 7. [Reciper](https://github.com/nuglifeleoji/AI-Recipe-Assistant-Reciper-Mobile)
 
    AdventureX 2025 winning project, Your Personal AI Nutrition Assistant.
+
+</div>
