@@ -72,6 +72,9 @@
     {%- if entry.bibtex_show -%}
       <a class="bibtex" href="#">bibtex</a>
     {%- endif -%}
+    {%- if entry.website -%}
+      <a href="{{ entry.website }}">website</a>
+    {%- endif -%}
   </div>
 
   {%- if entry.bibtex_show -%}
