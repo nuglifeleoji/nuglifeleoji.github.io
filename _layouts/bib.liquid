@@ -42,7 +42,11 @@
       {%- assign venue_includes_year = true -%}
     {%- endif -%}
     {%- if venue_text != '' -%}
-      {{ venue_text -}}
+      {%- assign venue_parts = venue_text | split: '; ' -%}
+      {%- for venue_part in venue_parts -%}
+        {%- unless forloop.first -%}<br>{%- endunless -%}
+        {{ venue_part -}}
+      {%- endfor -%}
       {%- if entry.year and venue_includes_year == false %}, {{ entry.year }}{% endif -%}
     {%- elsif entry.year -%}
       {{ entry.year }}
