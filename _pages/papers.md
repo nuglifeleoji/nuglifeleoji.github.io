@@ -67,6 +67,10 @@ nav_order: 2
     object-fit: contain;
   }
 
+  .paper-preview img + img {
+    margin-top: 0.65rem;
+  }
+
   .paper-content {
     min-width: 0;
   }

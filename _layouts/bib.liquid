@@ -16,25 +16,30 @@
 {%- elsif entry.arxiv -%}
   {%- assign paper_url = entry.arxiv | prepend: 'https://arxiv.org/abs/' -%}
 {%- endif -%}
+{%- assign entry_url = paper_url | default: entry.code -%}
 
 <article id="{{ entry.key }}" class="paper-entry{% unless entry.preview %} paper-entry--text-only{% endunless %}">
   {% if entry.preview %}
-    {% if entry.preview contains '://' %}
-      {% assign preview_url = entry.preview %}
-    {% else %}
-      {% assign preview_url = entry.preview | prepend: '/assets/img/publication_preview/' | relative_url %}
-    {% endif %}
+    {% assign preview_images = entry.preview | split: ',' %}
     <div class="paper-preview">
-      {% if paper_url %}<a href="{{ paper_url }}" aria-label="Read {{ entry.title | escape }}">{% endif %}
-      <img src="{{ preview_url }}" alt="Figure from {{ entry.title | escape }}" loading="lazy" decoding="async">
-      {% if paper_url %}</a>{% endif %}
+      {% if entry_url %}<a href="{{ entry_url }}" aria-label="View {{ entry.title | escape }}">{% endif %}
+      {% for preview_image in preview_images %}
+        {% assign preview_path = preview_image | strip %}
+        {% if preview_path contains '://' %}
+          {% assign preview_url = preview_path %}
+        {% else %}
+          {% assign preview_url = preview_path | prepend: '/assets/img/publication_preview/' | relative_url %}
+        {% endif %}
+        <img src="{{ preview_url | escape }}" alt="Figure {{ forloop.index }} from {{ entry.title | escape }}" loading="lazy" decoding="async">
+      {% endfor %}
+      {% if entry_url %}</a>{% endif %}
     </div>
   {% endif %}
 
   <div class="paper-content">
     <h2 class="paper-title">
-      {% if paper_url -%}
-        <a href="{{ paper_url }}">{{ entry.title }}</a>
+      {% if entry_url -%}
+        <a href="{{ entry_url }}">{{ entry.title }}</a>
       {%- else -%}
         {{- entry.title -}}
       {%- endif %}
