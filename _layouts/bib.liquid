@@ -89,7 +89,9 @@
           {%- unless forloop.first -%}<br>{%- endunless -%}
           {{ venue_part -}}
         {%- endfor -%}
-        {%- if entry.year and venue_includes_year == false %}, {{ entry.year }}{% endif -%}
+        {%- if entry.year and venue_includes_year == false -%}
+          {%- if venue_text == 'arXiv preprint' %} {{ entry.year }}{% else %}, {{ entry.year }}{% endif -%}
+        {%- endif -%}
       {%- elsif entry.year -%}
         {{ entry.year }}
       {%- endif -%}
