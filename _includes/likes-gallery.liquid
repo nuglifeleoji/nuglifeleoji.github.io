@@ -94,11 +94,19 @@
     background: var(--global-bg-color);
   }
 
+  .likes-media figure,
+  .likes-media picture,
   .likes-media img {
     display: block;
     width: 100%;
     height: 100%;
-    object-fit: cover;
+    margin: 0;
+  }
+
+  .likes-media img {
+    image-orientation: from-image;
+    object-fit: var(--likes-image-fit, cover);
+    object-position: var(--likes-image-position, center);
   }
 
   .likes-placeholder {
@@ -215,14 +223,9 @@
             target="_blank"
             rel="noopener"
             aria-label="View full image: {{ interest.title | escape }}"
+            style="--likes-image-fit: {{ interest.image_fit | default: 'cover' }}; --likes-image-position: {{ interest.image_position | default: 'center' }};"
           >
-            <img
-              src="{{ interest.image | relative_url }}"
-              alt="{{ interest.image_alt | escape }}"
-              style="object-position: {{ interest.image_position | default: 'center' }};"
-              loading="{% if forloop.first %}eager{% else %}lazy{% endif %}"
-              decoding="async"
-            >
+            {% include figure.liquid path=interest.image alt=interest.image_alt loading="lazy" sizes="240px" %}
           </a>
         {% else %}
           <div class="likes-media">
@@ -238,7 +241,9 @@
         {% endif %}
         <div class="likes-caption">
           <h3 class="likes-title">{{ interest.title }}</h3>
-          <p class="likes-description">{{ interest.description }}</p>
+          {% if interest.description %}
+            <p class="likes-description">{{ interest.description }}</p>
+          {% endif %}
         </div>
       </article>
     {% endfor %}
