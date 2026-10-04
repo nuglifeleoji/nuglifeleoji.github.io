@@ -10,7 +10,7 @@ profile:
   more_info: >
     <p>Stanford University</p>
     <p>Mathematics + Computer Science</p>
-    <p><a href="mailto:leo0610@stanford.edu">leo0610@stanford.edu</a></p>
+    <p><a href="mailto:leo0610@stanford.edu">leo0610{at} stanford {dot} edu</a></p>
 
 selected_papers: false # includes a list of papers marked as "selected={true}"
 social: true # includes social icons at the bottom of the page
