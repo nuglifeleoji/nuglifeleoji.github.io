@@ -1,0 +1,301 @@
+<style>
+  .likes-gallery {
+    --likes-border: var(--global-divider-color);
+    clear: both;
+    padding-top: 2.5rem;
+    margin-top: 2.5rem;
+    margin-bottom: 2rem;
+    border-top: 1px solid var(--likes-border);
+  }
+
+  .likes-toolbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    margin-bottom: 1.25rem;
+  }
+
+  .likes-heading {
+    margin: 0;
+    font-size: 1.65rem;
+    font-weight: 400;
+  }
+
+  .likes-controls {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .likes-controls[hidden] {
+    display: none;
+  }
+
+  .likes-arrow {
+    display: grid;
+    place-items: center;
+    width: 44px;
+    height: 44px;
+    padding: 0;
+    border: 1px solid var(--likes-border);
+    border-radius: 50%;
+    background: var(--global-bg-color);
+    color: var(--global-text-color);
+    cursor: pointer;
+  }
+
+  .likes-arrow:hover:not(:disabled) {
+    border-color: var(--global-theme-color);
+    color: var(--global-theme-color);
+  }
+
+  .likes-arrow:disabled {
+    opacity: 0.3;
+    cursor: default;
+  }
+
+  .likes-arrow svg {
+    width: 19px;
+    height: 19px;
+  }
+
+  .likes-track {
+    display: flex;
+    gap: 1rem;
+    overflow-x: auto;
+    overscroll-behavior-x: contain;
+    scroll-snap-type: x mandatory;
+    scrollbar-width: thin;
+    scrollbar-color: var(--global-text-color-light) transparent;
+    padding: 0.25rem 0 1rem;
+  }
+
+  .likes-track::-webkit-scrollbar {
+    height: 5px;
+  }
+
+  .likes-track::-webkit-scrollbar-thumb {
+    border-radius: 5px;
+    background: var(--global-text-color-light);
+  }
+
+  .likes-card {
+    flex: 0 0 clamp(12rem, calc((100% - 3rem) / 4), 15rem);
+    min-width: 0;
+    scroll-snap-align: start;
+  }
+
+  .likes-media {
+    display: block;
+    aspect-ratio: 1;
+    overflow: hidden;
+    border-radius: 3px;
+    background: var(--global-bg-color);
+  }
+
+  .likes-media img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .likes-placeholder {
+    display: grid;
+    place-content: center;
+    justify-items: center;
+    gap: 1rem;
+    width: 100%;
+    height: 100%;
+    background: #f2ece3;
+    color: #806340;
+  }
+
+  .likes-card--inter-milan .likes-placeholder {
+    background: #e8eef8;
+    color: #3761a2;
+  }
+
+  html[data-theme='dark'] .likes-placeholder {
+    background: #2b251f;
+    color: #c7b093;
+  }
+
+  html[data-theme='dark'] .likes-card--inter-milan .likes-placeholder {
+    background: #1c273b;
+    color: #9cb9e8;
+  }
+
+  .likes-placeholder svg {
+    width: 32px;
+    height: 32px;
+    opacity: 0.65;
+  }
+
+  .likes-placeholder span {
+    font-size: 0.75rem;
+  }
+
+  .likes-caption {
+    padding-top: 0.75rem;
+  }
+
+  .likes-title {
+    margin: 0 0 0.35rem;
+    font-size: 1rem;
+    font-weight: 500;
+    line-height: 1.2;
+  }
+
+  .likes-description {
+    margin: 0;
+    color: var(--global-text-color-light);
+    font-size: 0.85rem;
+    line-height: 1.5;
+  }
+
+  .likes-arrow:focus-visible,
+  .likes-track:focus-visible,
+  .likes-media:focus-visible {
+    outline: 2px solid var(--global-theme-color);
+    outline-offset: 3px;
+  }
+
+  @media (max-width: 575px) {
+    .likes-gallery {
+      padding-top: 1.5rem;
+      margin-top: 2rem;
+    }
+
+    .likes-track {
+      gap: 0.8rem;
+    }
+
+    .likes-card {
+      flex-basis: 72%;
+      max-width: 15rem;
+    }
+
+    .likes-heading {
+      font-size: 1.5rem;
+    }
+  }
+</style>
+
+<section class="likes-gallery" id="things-i-like" aria-labelledby="likes-heading" data-likes-gallery>
+  <div class="likes-toolbar">
+    <h2 class="likes-heading" id="likes-heading">Things I Like</h2>
+    <div class="likes-controls" hidden>
+      <button class="likes-arrow" type="button" aria-label="Previous interest" aria-controls="likes-track" data-likes-prev>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
+          <path d="m14 5-7 7 7 7M7 12h14" />
+        </svg>
+      </button>
+      <button class="likes-arrow" type="button" aria-label="Next interest" aria-controls="likes-track" data-likes-next>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
+          <path d="m10 5 7 7-7 7M17 12H3" />
+        </svg>
+      </button>
+    </div>
+  </div>
+
+  <div class="likes-track" id="likes-track" tabindex="0" role="region" aria-roledescription="carousel" aria-label="Personal interests">
+    {% for interest in site.data.likes %}
+      <article
+        class="likes-card likes-card--{{ interest.id }}"
+        role="group"
+        aria-roledescription="slide"
+        aria-label="{{ forloop.index }} of {{ forloop.length }}: {{ interest.title | escape }}"
+      >
+        {% if interest.image and interest.image != empty %}
+          <a
+            class="likes-media"
+            href="{{ interest.image | relative_url }}"
+            target="_blank"
+            rel="noopener"
+            aria-label="View full image: {{ interest.title | escape }}"
+          >
+            <img
+              src="{{ interest.image | relative_url }}"
+              alt="{{ interest.image_alt | escape }}"
+              style="object-position: {{ interest.image_position | default: 'center' }};"
+              loading="{% if forloop.first %}eager{% else %}lazy{% endif %}"
+              decoding="async"
+            >
+          </a>
+        {% else %}
+          <div class="likes-media">
+            <div class="likes-placeholder" role="img" aria-label="{{ interest.title | escape }} photo coming soon">
+              <svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
+                <rect x="5" y="7" width="38" height="34" rx="4" />
+                <circle cx="16" cy="18" r="3" />
+                <path d="m5 34 12-10 8 7 7-6 11 10" />
+              </svg>
+              <span>Photo coming soon</span>
+            </div>
+          </div>
+        {% endif %}
+        <div class="likes-caption">
+          <h3 class="likes-title">{{ interest.title }}</h3>
+          <p class="likes-description">{{ interest.description }}</p>
+        </div>
+      </article>
+    {% endfor %}
+  </div>
+</section>
+
+<script>
+  (() => {
+    const gallery = document.querySelector('[data-likes-gallery]');
+    if (!gallery) return;
+
+    const track = gallery.querySelector('.likes-track');
+    const cards = Array.from(track.querySelectorAll('.likes-card'));
+    const controls = gallery.querySelector('.likes-controls');
+    if (!cards.length) return;
+    const previous = gallery.querySelector('[data-likes-prev]');
+    const next = gallery.querySelector('[data-likes-next]');
+    const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+    let frame;
+
+    const update = () => {
+      const limit = track.scrollWidth - track.clientWidth;
+      controls.hidden = limit <= 1;
+      previous.disabled = track.scrollLeft <= 1;
+      next.disabled = track.scrollLeft >= limit - 1;
+    };
+
+    const goTo = (left) => {
+      track.scrollTo({
+        left,
+        behavior: reducedMotion.matches ? 'instant' : 'smooth',
+      });
+    };
+
+    const step = (direction) => {
+      const gap = parseFloat(getComputedStyle(track).columnGap) || 0;
+      goTo(track.scrollLeft + direction * (cards[0].getBoundingClientRect().width + gap));
+    };
+
+    previous.addEventListener('click', () => step(-1));
+    next.addEventListener('click', () => step(1));
+    track.addEventListener('keydown', (event) => {
+      if (!['ArrowLeft', 'ArrowRight', 'Home', 'End'].includes(event.key)) return;
+      event.preventDefault();
+      if (event.key === 'Home') goTo(0);
+      else if (event.key === 'End') goTo(track.scrollWidth);
+      else step(event.key === 'ArrowRight' ? 1 : -1);
+    });
+    track.addEventListener(
+      'scroll',
+      () => {
+        cancelAnimationFrame(frame);
+        frame = requestAnimationFrame(update);
+      },
+      { passive: true }
+    );
+    new ResizeObserver(update).observe(track);
+    update();
+  })();
+</script>
