@@ -1,6 +1,6 @@
 ---
 layout: about
-title: about
+title: About
 permalink: /
 subtitle:
 profile:
@@ -30,10 +30,9 @@ I am a sophomore at Stanford University majoring in Mathematics and Computer Sci
 
 My research work focuses on build AI systems that continuously learn from experience and improve over time (a topic known as recursive self-improvement). This includes: [curriculum design for RSI (ICLR 2026 LLA)](https://openreview.net/forum?id=TRQLuxgxBN); [parallel execution framework(Combee, COLM 2026)](https://arxiv.org/abs/2604.04247); understanding the failure modes of self-evolving agents; learning to recover from agent failures[(Sentry, COLM 2026 WAB)](https://openreview.net/forum?id=xpj08ezIo4&referrer=%5BAuthor%20Console%5D(%2Fgroup%3Fid%3Dcolmweb.org%2FCOLM%2F2026%2FWorkshop%2FWAB%2FAuthors%23your-submissions)); stateless language agents for long-horizon research. I am also an active contributor for many popular RSI frameworks like (Agentic Context Engineering(ACE)[ICLR 2026])[https://github.com/ace-agent/ace], (GEPA[ICLR 2026])[https://github.com/gepa-ai/gepa], (CORAL[COLM 2026])[https://github.com/Human-Agent-Society/CORAL]. 
 
+Besides research, I enjoy getting hands-on with real-world systems across different industries, from big tech and AI labs to quantitative finance.
+In the past, I am very fortunate to intern at Tencent Wechat Reading team (Long-context multi-agent systems), Deepseek AI(Deepseek sparse attention), Algovant (Option market agent), and Scientech Research (Agent swarm research for alpha discovery). Next summer, I'll be joining TikTok as a software engineer intern in San Jose. If you're around the area, I'd love to connect!
 
-I believe the next generation of self-evolving agents will not be built by optimizing harness or weights in isolation. Instead, they will jointly evolve: the harness adapt quickly to local tasks, failures, and environments, while the weights consolidate repeated experience into more general reasoning capabilities. I think one of the central challenges is to design agents that can manage this division of labor—deciding what should remain as transient context, what should be encoded into the harness, and what should be internalized into the model itself.
-
-Previously, I interned at [Algovant](https://www.linkedin.com/company/algovantinc/), working on [multi-agent systems for options-market analysis](https://github.com/nuglifeleoji/Options-Analytics-Agent), and at [Apx Labs](https://apxlabs.dev/), where I studied multi-agent systems for desktop automation and user-intent understanding through UI interactions. I also interned at DeepSeek, focusing on Deepseek sparse attention (applied in V3.2!), and participated in the Tencent Spark Research Program, where I worked on long-context understanding with multi-agent systems. And this summer, I am fortunate to intern at [Scientech Research Capital](https://www.scientechresearch.io/) as a quantitative developer!
 
 Before Stanford, I graduated from [Shenzhen Middle School](https://en.wikipedia.org/wiki/Shenzhen_Middle_School), where I competed in national level mathematics and programming olympiads and received several gold medals. I am also deeply interested in pure mathematics, including the Hopf fibration, convex optimization, Galois theory, and chaotic maps with symbolic dynamics. I attended the [Stanford Mathematics Camp(SUMaC)](https://sumac.spcs.stanford.edu/) in 2023 and 2024, studying abstract algebra and algebraic topology.
 
