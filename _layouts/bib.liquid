@@ -1,31 +1,68 @@
 ---
 ---
-<article id="{{ entry.key }}" class="paper-entry">
-  <div class="paper-title">{{ entry.title }}</div>
+{%- assign paper_url = null -%}
+{%- if entry.pdf -%}
+  {%- if entry.pdf contains '://' -%}
+    {%- assign paper_url = entry.pdf -%}
+  {%- else -%}
+    {%- assign paper_url = entry.pdf | prepend: '/assets/pdf/' | relative_url -%}
+  {%- endif -%}
+{%- elsif entry.html -%}
+  {%- if entry.html contains '://' -%}
+    {%- assign paper_url = entry.html -%}
+  {%- else -%}
+    {%- assign paper_url = entry.html | prepend: '/assets/html/' | relative_url -%}
+  {%- endif -%}
+{%- elsif entry.arxiv -%}
+  {%- assign paper_url = entry.arxiv | prepend: 'https://arxiv.org/abs/' -%}
+{%- endif -%}
 
-  <div class="paper-authors">
-    {%- for author in entry.author_array -%}
-      {%- assign author_last_name = author.last | regex_replace: '[*∗†‡§¶‖&^]', '' -%}
-      {%- assign author_last_html = author.last | regex_replace: '([*∗†‡§¶‖&^]+)', '<sup>\1</sup>' -%}
-      {%- assign author_is_self = false -%}
-      {%- if site.scholar.last_name contains author_last_name -%}
-        {%- if site.scholar.first_name contains author.first -%}
-          {%- assign author_is_self = true -%}
-        {%- endif -%}
-      {%- endif -%}
-      {%- unless forloop.first -%}, {% endunless -%}
-      {%- capture author_name -%}{{ author.first | strip }} {{ author_last_html | strip }}{%- endcapture -%}
-      {%- if author_is_self -%}
-        <strong>{{ author_name }}</strong>
+<article id="{{ entry.key }}" class="paper-entry{% unless entry.preview %} paper-entry--text-only{% endunless %}">
+  {% if entry.preview %}
+    {% if entry.preview contains '://' %}
+      {% assign preview_url = entry.preview %}
+    {% else %}
+      {% assign preview_url = entry.preview | prepend: '/assets/img/publication_preview/' | relative_url %}
+    {% endif %}
+    <div class="paper-preview">
+      {% if paper_url %}<a href="{{ paper_url }}" aria-label="Read {{ entry.title | escape }}">{% endif %}
+      <img src="{{ preview_url }}" alt="Figure from {{ entry.title | escape }}" loading="lazy" decoding="async">
+      {% if paper_url %}</a>{% endif %}
+    </div>
+  {% endif %}
+
+  <div class="paper-content">
+    <h2 class="paper-title">
+      {% if paper_url -%}
+        <a href="{{ paper_url }}">{{ entry.title }}</a>
       {%- else -%}
-        {{ author_name }}
-      {%- endif -%}
-    {%- endfor -%}
-  </div>
+        {{- entry.title -}}
+      {%- endif %}
+    </h2>
 
-  {%- assign proceedings = 'inproceedings,incollection' | split: ',' -%}
-  {%- assign thesis = 'thesis,mastersthesis,phdthesis' | split: ',' -%}
-  {%- capture venue -%}
+    <div class="paper-authors">
+      {%- for author in entry.author_array -%}
+        {%- assign author_last_name = author.last | regex_replace: '[*∗†‡§¶‖&^]', '' -%}
+        {%- assign author_last_html = author.last | regex_replace: '([*∗†‡§¶‖&^]+)', '<sup>\1</sup>' -%}
+        {%- assign author_is_self = false -%}
+        {%- if site.scholar.last_name contains author_last_name -%}
+          {%- if site.scholar.first_name contains author.first -%}
+            {%- assign author_is_self = true -%}
+          {%- endif -%}
+        {%- endif -%}
+        {%- unless forloop.first -%}, {% endunless -%}
+        {%- capture author_name -%}{{ author.first | strip }} {{ author_last_html | strip }}{%- endcapture -%}
+        {%- if author_is_self -%}
+          <strong>{{ author_name }}</strong>
+        {%- else -%}
+          {{ author_name }}
+        {%- endif -%}
+      {%- endfor -%}
+    </div>
+
+    {%- assign proceedings = 'inproceedings,incollection' | split: ',' -%}
+    {%- assign thesis = 'thesis,mastersthesis,phdthesis' | split: ',' -%}
+    {%- capture venue -%}
     {%- if entry.type == 'article' -%}
       {{ entry.journal }}
     {%- elsif proceedings contains entry.type -%}
@@ -35,57 +72,49 @@
     {%- endif -%}
   {%- endcapture -%}
 
-  <div class="paper-venue">
-    {%- assign venue_text = venue | strip -%}
-    {%- assign venue_includes_year = false -%}
-    {%- if entry.year and venue_text contains entry.year -%}
-      {%- assign venue_includes_year = true -%}
-    {%- endif -%}
-    {%- if venue_text != '' -%}
-      {%- assign venue_parts = venue_text | split: '; ' -%}
-      {%- for venue_part in venue_parts -%}
-        {%- unless forloop.first -%}<br>{%- endunless -%}
-        {{ venue_part -}}
-      {%- endfor -%}
-      {%- if entry.year and venue_includes_year == false %}, {{ entry.year }}{% endif -%}
-    {%- elsif entry.year -%}
-      {{ entry.year }}
-    {%- endif -%}
-  </div>
-
-  {%- if entry.note -%}
-    <div class="paper-note">{{ entry.note }}</div>
-  {%- endif -%}
-
-  <div class="links paper-links">
-    {%- if entry.pdf -%}
-      {%- if entry.pdf contains '://' -%}
-        <a href="{{ entry.pdf }}">paper</a>
-      {%- else -%}
-        <a href="{{ entry.pdf | prepend: '/assets/pdf/' | relative_url }}">paper</a>
+    <div class="paper-venue">
+      {%- assign venue_text = venue | strip -%}
+      {%- assign venue_includes_year = false -%}
+      {%- if entry.year and venue_text contains entry.year -%}
+        {%- assign venue_includes_year = true -%}
       {%- endif -%}
-    {%- elsif entry.html -%}
-      {%- if entry.html contains '://' -%}
-        <a href="{{ entry.html }}">paper</a>
-      {%- else -%}
-        <a href="{{ entry.html | prepend: '/assets/html/' | relative_url }}">paper</a>
+      {%- if venue_text != '' -%}
+        {%- assign venue_parts = venue_text | split: '; ' -%}
+        {%- for venue_part in venue_parts -%}
+          {%- unless forloop.first -%}<br>{%- endunless -%}
+          {{ venue_part -}}
+        {%- endfor -%}
+        {%- if entry.year and venue_includes_year == false %}, {{ entry.year }}{% endif -%}
+      {%- elsif entry.year -%}
+        {{ entry.year }}
       {%- endif -%}
-    {%- elsif entry.arxiv -%}
-      <a href="https://arxiv.org/abs/{{ entry.arxiv }}">paper</a>
-    {%- endif -%}
-    {%- if entry.bibtex_show -%}
-      <a class="bibtex" href="#">bibtex</a>
-    {%- endif -%}
-    {%- if entry.website -%}
-      <a href="{{ entry.website }}">website</a>
-    {%- endif -%}
-  </div>
-
-  {%- if entry.bibtex_show -%}
-    <div class="bibtex hidden">
-      {% highlight bibtex %}
-      {{- entry.bibtex | hideCustomBibtex -}}
-      {% endhighlight %}
     </div>
-  {%- endif -%}
+
+    {%- if entry.note -%}
+      <div class="paper-note">{{ entry.note }}</div>
+    {%- endif -%}
+
+    <div class="links paper-links">
+      {%- if paper_url -%}
+        <a href="{{ paper_url }}">paper</a>
+      {%- endif -%}
+      {%- if entry.code -%}
+        <a href="{{ entry.code }}">code</a>
+      {%- endif -%}
+      {%- if entry.bibtex_show -%}
+        <a class="bibtex" href="#{{ entry.key }}-bibtex" aria-controls="{{ entry.key }}-bibtex">bibtex</a>
+      {%- endif -%}
+      {%- if entry.website -%}
+        <a href="{{ entry.website }}">website</a>
+      {%- endif -%}
+    </div>
+
+    {%- if entry.bibtex_show -%}
+      <div id="{{ entry.key }}-bibtex" class="bibtex hidden">
+        {% highlight bibtex %}
+        {{- entry.bibtex | hideCustomBibtex -}}
+        {% endhighlight %}
+      </div>
+    {%- endif -%}
+  </div>
 </article>
