@@ -26,16 +26,25 @@ latest_posts:
   limit: 3 # leave blank to include all the blog posts
 ---
 
+<style>
+  .profile {
+    min-width: min(19rem, 100%);
+  }
+
+  .profile .more-info p {
+    display: block;
+    white-space: nowrap;
+  }
+</style>
+
 I am a sophomore at Stanford University majoring in Mathematics and Computer Science. I am a member of the [Stanford Pervasive Parallelism Lab](https://ppl.stanford.edu/) and my adviser is [Professor Kunle Olukotun](https://engineering.stanford.edu/people/oyekunle-olukotun). I have also be working with the [Stanford Scaling Intelligence Lab](https://scalingintelligence.stanford.edu/) and [the Iris Lab](https://irislab.stanford.edu/). 
 
-My research work focuses on build AI systems that continuously learn from experience and improve over time (a topic known as recursive self-improvement). This includes: curriculum design [(Learning what to learn, ICLR 2026 LLA)](https://openreview.net/forum?id=TRQLuxgxBN); parallel execution framework [(Combee, COLM 2026)](https://arxiv.org/abs/2604.04247); understanding the failure modes of self-evolving agents; learning to recover from agent failures [(Sentry, COLM 2026 WAB)](https://openreview.net/forum?id=xpj08ezIo4); stateless language agents for long-horizon research. I am also an active contributor for many popular RSI frameworks like [Agentic Context Engineering (ACE, ICLR 2026)](https://github.com/ace-agent/ace), [GEPA (ICLR 2026)](https://github.com/gepa-ai/gepa), [CORAL (COLM 2026)](https://github.com/Human-Agent-Society/CORAL).
+My research work focuses on building AI systems that continuously learn from experience and improve over time (a topic known as recursive self-improvement). This includes: curriculum design [(Learning what to learn, ICLR 2026 LLA)](https://openreview.net/forum?id=TRQLuxgxBN); parallel execution framework [(Combee, COLM 2026)](https://arxiv.org/abs/2604.04247); understanding the failure modes of self-evolving agents; learning to recover from agent failures [(Sentry, COLM 2026 WAB)](https://openreview.net/forum?id=xpj08ezIo4); stateless language agents for long-horizon research. I am also an active contributor for many popular RSI frameworks like [Agentic Context Engineering (ACE, ICLR 2026)](https://github.com/ace-agent/ace), [GEPA (ICLR 2026)](https://github.com/gepa-ai/gepa), [CORAL (COLM 2026)](https://github.com/Human-Agent-Society/CORAL).
 
 Besides research, I enjoy getting hands-on with real-world systems across different industries, from big tech and AI labs to quantitative finance.
 In the past, I am very fortunate to intern at [Tencent Wechat Reading team](https://www.tencent.com/zh-cn/)(Long-context multi-agent systems), [Deepseek](https://www.deepseek.com/)(Deepseek sparse attention), [Algovant](https://www.algovant.com/) (Option market agent), and [Scientech Research](https://www.scientechresearch.io/)(Agent swarm research for alpha discovery). Next summer, I'll be joining [TikTok](https://www.tiktok.com/en/) as a software engineer intern in San Jose. If you're around the area, I'd love to connect!
 
 
-Before Stanford, I graduated from [Shenzhen Middle School](https://en.wikipedia.org/wiki/Shenzhen_Middle_School), where I won gold medals in national level mathematics and programming olympiads. I am also deeply interested in pure mathematics, including the Hopf fibration, convex optimization, Galois theory, and chaotic maps with symbolic dynamics. I attended the [Stanford Mathematics Camp(SUMaC)](https://sumac.spcs.stanford.edu/) in 2023 and 2024, studying abstract algebra and algebraic topology.
-
-Outside of research, I spent my freetime teaching my Codex to win kaggle competitions(three gold medals so far lmao) and contributing to opensource project like [mypy](https://github.com/python/mypy), [shapely](https://github.com/shapely/shapely), and [torchgeo](https://github.com/torchgeo/torchgeo). I am an Inter Milan fan and enjoy playing Battlegrounds by Heartstone, my favourite minion is BeatBoxer!!! I also like Cantonese food like char siu and dim sum!
+Before Stanford, I graduated from [Shenzhen Middle School](https://en.wikipedia.org/wiki/Shenzhen_Middle_School), where I won gold medals in national level mathematics and programming olympiads. I spent my freetime teaching my Codex to win kaggle competitions(three gold medals so far lmao). I am an Inter Milan fan and enjoy playing Battlegrounds by Heartstone, my favourite minion is BeatBoxer!!! I also like Cantonese food like char siu and dim sum!
 
 Feel free to [reach out](mailto:leo0610@stanford.edu) if you want to collaborate with me.
