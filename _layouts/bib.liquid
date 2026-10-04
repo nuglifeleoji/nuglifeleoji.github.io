@@ -83,7 +83,9 @@
       {%- if entry.year and venue_text contains entry.year -%}
         {%- assign venue_includes_year = true -%}
       {%- endif -%}
-      {%- if venue_text != '' -%}
+      {%- if entry.status -%}
+        {{ entry.status | escape }}
+      {%- elsif venue_text != '' -%}
         {%- assign venue_parts = venue_text | split: '; ' -%}
         {%- for venue_part in venue_parts -%}
           {%- unless forloop.first -%}<br>{%- endunless -%}

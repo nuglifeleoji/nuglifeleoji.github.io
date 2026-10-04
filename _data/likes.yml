@@ -1,0 +1,17 @@
+# Add your photos to assets/img/likes/, then set image to /assets/img/likes/filename.jpg.
+# Cards appear in this order. image_position controls the crop inside each frame.
+- id: hearthstone
+  title: Hearthstone
+  category: Games
+  description: "Mostly Battlegrounds. BeatBoxer is my favorite minion."
+  image:
+  image_alt: Hearthstone Battlegrounds
+  image_position: center
+
+- id: inter-milan
+  title: Inter Milan
+  category: Football
+  description: "My team. Forza Inter!"
+  image:
+  image_alt: Inter Milan
+  image_position: center
