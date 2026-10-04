@@ -1,5 +1,61 @@
 # Add your photos to assets/img/likes/, then set image to /assets/img/likes/filename.jpg.
 # Cards appear in this order. image_position controls the crop; image_fit: contain shows the full image.
+# image_rotation is in degrees; negative values rotate counterclockwise.
+- id: evangelion
+  title: Evangelion
+  category: Anime
+  image: /assets/img/likes/WechatIMG3623.jpeg
+  image_alt: Evangelion Unit-01
+  image_position: center top
+
+- id: dim-sum
+  title: Dim Sum
+  category: Food
+  image: /assets/img/likes/WechatIMG3616.jpeg
+  image_alt: Dim sum served in bamboo steamers
+
+- id: sky-team
+  title: Sky Team
+  category: Board Games
+  image: /assets/img/likes/WechatIMG3610.jpeg
+  image_alt: A game of Sky Team
+  image_position: center 60%
+
+- id: coco
+  title: CoCo
+  category: Drinks
+  description: BUBBLE GAGA
+  image: /assets/img/likes/WechatIMG3614.jpeg
+  image_alt: CoCo drinks including Bubble Gaga
+  image_position: center 45%
+
+- id: gecko
+  title: Gecko
+  category: Animals
+  image: /assets/img/likes/WechatIMG3617.jpeg
+  image_alt: A gecko resting on a hand
+
+- id: claypot-rice
+  title: Claypot Rice
+  category: Food
+  image: /assets/img/likes/WechatIMG3615.jpeg
+  image_alt: Claypot rice with meat and eggs
+  image_rotation: -90
+
+- id: detective-conan
+  title: Detective Conan
+  category: Anime
+  image: /assets/img/likes/WechatIMG3620.jpeg
+  image_alt: Detective Conan
+
+- id: hotpot
+  title: Hot Pot
+  category: Food
+  description: Making a hotpot at home.
+  image: /assets/img/likes/WechatIMG3613.jpeg
+  image_alt: A hot pot and ingredients prepared at home
+  image_rotation: -90
+
 - id: hearthstone
   title: Hearthstone
   category: Games
@@ -9,12 +65,26 @@
   image_fit: contain
   image_position: center
 
-- id: sky-team
-  title: Sky Team
-  category: Board Games
-  image: /assets/img/likes/WechatIMG3610.jpeg
-  image_alt: A game of Sky Team
-  image_position: center 60%
+- id: stanford-yogurt
+  title: Stanford Yogurt
+  category: Food
+  image: /assets/img/likes/WechatIMG3618.jpeg
+  image_alt: Stanford yogurt topped with granola
+  image_position: center 75%
+
+- id: saint-seiya
+  title: Saint Seiya
+  category: Anime
+  image: /assets/img/likes/WechatIMG3622.jpeg
+  image_alt: A character in golden armor from Saint Seiya
+  image_position: center top
+
+- id: ramen-nagi
+  title: Ramen Nagi
+  category: Food
+  image: /assets/img/likes/WechatIMG3619.jpeg
+  image_alt: The Ramen Nagi sign
+  image_position: center top
 
 - id: ticket-to-ride
   title: Ticket to Ride
@@ -27,84 +97,10 @@
   category: Food
   image: /assets/img/likes/WechatIMG3612.jpeg
   image_alt: A bowl of Mao Xue Wang
-
-- id: hotpot
-  title: Hot Pot
-  category: Food
-  description: Making a hotpot at home.
-  image: /assets/img/likes/WechatIMG3613.jpeg
-  image_alt: A hot pot and ingredients prepared at home
-
-- id: coco
-  title: CoCo
-  category: Drinks
-  description: BUBBLE GAGA
-  image: /assets/img/likes/WechatIMG3614.jpeg
-  image_alt: CoCo drinks including Bubble Gaga
-  image_position: center 45%
-
-- id: claypot-rice
-  title: Claypot Rice
-  category: Food
-  image: /assets/img/likes/WechatIMG3615.jpeg
-  image_alt: Claypot rice with meat and eggs
-
-- id: dim-sum
-  title: Dim Sum
-  category: Food
-  image: /assets/img/likes/WechatIMG3616.jpeg
-  image_alt: Dim sum served in bamboo steamers
-
-- id: gecko
-  title: Gecko
-  category: Animals
-  image: /assets/img/likes/WechatIMG3617.jpeg
-  image_alt: A gecko resting on a hand
-
-- id: stanford-yogurt
-  title: Stanford Yogurt
-  category: Food
-  image: /assets/img/likes/WechatIMG3618.jpeg
-  image_alt: Stanford yogurt topped with granola
-  image_position: center 75%
-
-- id: ramen-nagi
-  title: Ramen Nagi
-  category: Food
-  image: /assets/img/likes/WechatIMG3619.jpeg
-  image_alt: The Ramen Nagi sign
-  image_position: center top
-
-- id: detective-conan
-  title: Detective Conan
-  category: Anime
-  image: /assets/img/likes/WechatIMG3620.jpeg
-  image_alt: Detective Conan
+  image_rotation: -90
 
 - id: rascal-does-not-dream
   title: Rascal Does Not Dream
   category: Anime
   image: /assets/img/likes/WechatIMG3621.jpeg
   image_alt: A scene from Rascal Does Not Dream
-
-- id: saint-seiya
-  title: Saint Seiya
-  category: Anime
-  image: /assets/img/likes/WechatIMG3622.jpeg
-  image_alt: A character in golden armor from Saint Seiya
-  image_position: center top
-
-- id: evangelion
-  title: Evangelion
-  category: Anime
-  image: /assets/img/likes/WechatIMG3623.jpeg
-  image_alt: Evangelion Unit-01
-  image_position: center top
-
-- id: inter-milan
-  title: Inter Milan
-  category: Football
-  description: "My team. Forza Inter!"
-  image:
-  image_alt: Inter Milan
-  image_position: center

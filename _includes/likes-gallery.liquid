@@ -107,6 +107,7 @@
     image-orientation: from-image;
     object-fit: var(--likes-image-fit, cover);
     object-position: var(--likes-image-position, center);
+    transform: rotate(var(--likes-image-rotation, 0deg));
   }
 
   .likes-placeholder {
@@ -223,7 +224,7 @@
             target="_blank"
             rel="noopener"
             aria-label="View full image: {{ interest.title | escape }}"
-            style="--likes-image-fit: {{ interest.image_fit | default: 'cover' }}; --likes-image-position: {{ interest.image_position | default: 'center' }};"
+            style="--likes-image-fit: {{ interest.image_fit | default: 'cover' }}; --likes-image-position: {{ interest.image_position | default: 'center' }}; --likes-image-rotation: {{ interest.image_rotation | default: 0 }}deg;"
           >
             {% include figure.liquid path=interest.image alt=interest.image_alt loading="lazy" sizes="240px" %}
           </a>
