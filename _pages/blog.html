@@ -1,0 +1,63 @@
+---
+layout: page
+title: Blog
+permalink: /blog/
+nav: true
+nav_order: 3
+---
+
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Merriweather:wght@700&family=Open+Sans:wght@400;600&display=swap" />
+<link rel="stylesheet" href="{{ '/assets/css/blog-index.css' | relative_url }}" />
+
+<div class="blog-index">
+  {% for post in site.posts %} {% assign cover_file = site.static_files | where: 'path', post.cover | first %}
+  <article class="blog-entry{% unless cover_file %} blog-entry--text-only{% endunless %}" aria-labelledby="blog-title-{{ forloop.index }}">
+    <h2 class="blog-entry-title" id="blog-title-{{ forloop.index }}">
+      <a href="{{ post.url | relative_url }}">{{ post.title }}</a>
+    </h2>
+    <p class="blog-entry-description">{{ post.description }}</p>
+    {% if cover_file %}
+    <a class="blog-entry-cover" href="{{ post.url | relative_url }}" aria-label="Read {{ post.title | escape }}">
+      <img
+        src="{{ post.cover | relative_url }}"
+        alt="{{ post.cover_alt | escape }}"
+        width="{{ post.cover_width }}"
+        height="{{ post.cover_height }}"
+        decoding="async"
+      />
+    </a>
+    {% endif %}
+    <div class="blog-entry-meta">
+      <span class="blog-entry-date">
+        {% if post.reading_time %}<span>{{ post.reading_time }} min read</span><span aria-hidden="true">·</span>{% endif %}
+        <time datetime="{{ post.date | date_to_xmlschema }}">{{ post.date | date: '%B %-d, %Y' }}</time>
+      </span>
+      {% if post.tags.size > 0 %}
+      <span class="blog-entry-separator" aria-hidden="true">·</span>
+      <ul class="blog-entry-tags" aria-label="Tags">
+        {% for tag in post.tags %}
+        <li>
+          <a href="{{ tag | slugify | prepend: '/blog/tag/' | append: '/' | relative_url }}"
+            ><span class="blog-entry-hash" aria-hidden="true">#</span> {{ tag }}</a
+          >
+        </li>
+        {% endfor %}
+      </ul>
+      {% endif %} {% if post.categories.size > 0 %}
+      <span class="blog-entry-separator" aria-hidden="true">·</span>
+      <ul class="blog-entry-categories" aria-label="Categories">
+        {% for category in post.categories %}
+        <li>
+          <a href="{{ category | slugify | prepend: '/blog/category/' | append: '/' | relative_url }}"
+            ><i class="fa-solid fa-tag" aria-hidden="true"></i> {{ category }}</a
+          >
+        </li>
+        {% endfor %}
+      </ul>
+      {% endif %}
+    </div>
+  </article>
+  {% endfor %}
+</div>
