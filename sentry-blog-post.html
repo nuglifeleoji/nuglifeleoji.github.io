@@ -1,0 +1,568 @@
+<title>Failure Knowledge Is Conditional</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<meta name="keywords" content="LLM agents, agent reliability, failure detection and recovery, runtime intervention, self-evolving agents, agent memory">
+<meta name="description" content="Why failure lessons should be learned across tasks, shown only when a matching failure happens, and kept only if the fix worked. Notes on Sentry.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,650;12..96,750&family=IBM+Plex+Mono:wght@400;500&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&display=swap">
+<style>
+/* Layout: one reading column (~66ch) with figures allowed to break out wider. */
+:root{
+  --bg:#ffffff;
+  --fg:#17181b;
+  --muted:#5b5f68;
+  --faint:#8a8e97;
+  --rule:#e5e6ea;
+  --tint:#f5f5f7;
+  --accent:#b3122e;
+  --accent-soft:#fbe8eb;
+  --bar-base:#c8cad0;
+  --bar-mid:#5c5f67;
+  --code-bg:#f5f5f7;
+  --f-display:"Bricolage Grotesque", "Helvetica Neue", Arial, sans-serif;
+  --f-body:"Source Serif 4", Georgia, serif;
+  --f-mono:"IBM Plex Mono", ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
+  --col:42rem;
+  --wide:56rem;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#111214; --fg:#ebecef; --muted:#a4a8b0; --faint:#757983; --rule:#2a2c31; --tint:#1a1b1f;
+    --accent:#ff5d73; --accent-soft:#3a1a21; --bar-base:#464950; --bar-mid:#91959d; --code-bg:#1a1b1f;
+    color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#111214; --fg:#ebecef; --muted:#a4a8b0; --faint:#757983; --rule:#2a2c31; --tint:#1a1b1f;
+  --accent:#ff5d73; --accent-soft:#3a1a21; --bar-base:#464950; --bar-mid:#91959d; --code-bg:#1a1b1f;
+  color-scheme:dark;
+}
+
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+@media (prefers-reduced-motion: reduce){html{scroll-behavior:auto}}
+body{
+  background:var(--bg); color:var(--fg);
+  font-family:var(--f-body); font-size:1.125rem; line-height:1.68;
+  padding-left:max(16px, env(safe-area-inset-left, 0px));
+  padding-right:max(16px, env(safe-area-inset-right, 0px));
+  padding-block:0 4rem;
+  -webkit-font-smoothing:antialiased;
+}
+a{color:inherit; text-decoration-color:color-mix(in srgb, var(--accent) 55%, transparent); text-underline-offset:3px; text-decoration-thickness:1px}
+a:hover{color:var(--accent)}
+:focus-visible{outline:2px solid var(--accent); outline-offset:3px; border-radius:3px}
+
+.wrap{max-width:var(--col); margin-left:auto; margin-right:auto}
+.wide{max-width:var(--wide); margin-left:auto; margin-right:auto}
+
+/* top bar */
+.topbar{
+  position:sticky; top:env(safe-area-inset-top, 0px); z-index:5;
+  background:color-mix(in srgb, var(--bg) 92%, transparent);
+  backdrop-filter:blur(8px); -webkit-backdrop-filter:blur(8px);
+  border-bottom:1px solid var(--rule);
+  margin-left:calc(-1 * max(16px, env(safe-area-inset-left, 0px)));
+  margin-right:calc(-1 * max(16px, env(safe-area-inset-right, 0px)));
+  padding-left:max(16px, env(safe-area-inset-left, 0px));
+  padding-right:max(16px, env(safe-area-inset-right, 0px));
+}
+.topbar-in{max-width:var(--wide); margin:0 auto; display:flex; align-items:center; justify-content:space-between; gap:1rem; min-height:3rem}
+.crumbs{font-family:var(--f-mono); font-size:.78rem; color:var(--muted); display:flex; gap:.5rem; align-items:center; min-width:0; white-space:nowrap; overflow:hidden; text-overflow:ellipsis}
+.crumbs a{text-decoration:none}
+.crumbs .sep{color:var(--faint)}
+
+
+/* header */
+header.hero{padding-top:3.2rem}
+.date{font-family:var(--f-mono); font-size:.8rem; color:var(--muted); letter-spacing:.04em}
+.tags{display:flex; flex-wrap:wrap; gap:.4rem; margin-top:.6rem}
+.tags span{font-family:var(--f-mono); font-size:.72rem; color:var(--accent); background:var(--accent-soft); padding:.2rem .55rem; border-radius:999px}
+h1{
+  font-family:var(--f-display); font-weight:750; font-size:clamp(2.2rem, 6vw, 3.4rem);
+  line-height:1.04; letter-spacing:-.025em; margin:.6rem 0 .3rem; text-wrap:balance;
+}
+.deck{display:grid; gap:1rem; margin:1.8rem 0 0}
+.deck p{margin:0; font-size:1.12rem}
+.deck b{font-weight:600}
+.deck p.links{display:flex; flex-wrap:wrap; gap:.3rem .6rem; font-family:var(--f-mono); font-size:.82rem; color:var(--faint)}
+.deck p.links a{color:var(--accent)}
+.byline{display:flex; align-items:center; gap:.8rem; margin:2rem 0 0; padding:1rem 0; border-top:1px solid var(--rule); border-bottom:1px solid var(--rule); font-size:.95rem}
+.avatar{width:2.4rem; height:2.4rem; border-radius:50%; background:var(--accent-soft); color:var(--accent); display:grid; place-items:center; font:650 .9rem/1 var(--f-display); flex:none}
+.byline .who{display:grid; line-height:1.35}
+.byline .who span:last-child{color:var(--muted); font-size:.85rem}
+
+/* toc */
+nav.toc{margin:2.2rem 0 0}
+.label{font-family:var(--f-mono); font-size:.74rem; letter-spacing:.12em; text-transform:uppercase; color:var(--muted)}
+nav.toc ol{margin:.7rem 0 0; padding:0; list-style:none; counter-reset:toc; display:grid; gap:.25rem}
+nav.toc li{counter-increment:toc; display:flex; gap:.75rem; align-items:baseline; font-size:1rem}
+nav.toc li::before{content:counter(toc, decimal-leading-zero); font-family:var(--f-mono); font-size:.78rem; color:var(--faint); min-width:1.6rem}
+nav.toc a{text-decoration:none}
+nav.toc a:hover{text-decoration:underline}
+
+/* sections */
+section{margin-top:4rem; scroll-margin-top:4rem}
+h2{
+  font-family:var(--f-display); font-weight:650; font-size:clamp(1.55rem, 3.6vw, 1.95rem);
+  line-height:1.15; letter-spacing:-.015em; margin:0 0 1.1rem; text-wrap:balance;
+}
+h3{font-family:var(--f-display); font-weight:650; font-size:1.3rem; line-height:1.25; letter-spacing:-.01em; margin:0 0 .25rem; text-wrap:balance}
+p{margin:0 0 1.05rem}
+strong{font-weight:600}
+em{font-style:italic}
+code, .mono{font-family:var(--f-mono); font-size:.86em}
+p code, li code{background:var(--code-bg); padding:.08em .35em; border-radius:4px}
+ul.plain{padding-left:1.15rem; margin:0 0 1.05rem}
+ul.plain li{margin:.3rem 0}
+
+.thesis{
+  font-family:var(--f-display); font-weight:650; font-size:clamp(1.35rem, 3.4vw, 1.75rem); line-height:1.25; letter-spacing:-.012em;
+  margin:2rem 0; padding:1.4rem 0; border-top:2px solid var(--fg); border-bottom:1px solid var(--rule); text-wrap:balance;
+}
+.thesis .hl{color:var(--accent)}
+
+/* figures */
+figure{margin:2rem auto; }
+figure img{display:block; width:100%; height:auto; border-radius:6px; background:#fff; border:1px solid var(--rule)}
+figcaption{font-size:.88rem; line-height:1.55; color:var(--muted); margin-top:.7rem; max-width:var(--col)}
+figcaption b{color:var(--fg); font-weight:600}
+.video{position:relative; width:100%; aspect-ratio:16/9; max-width:100%; border-radius:8px; overflow:hidden; background:#fff; border:1px solid var(--rule)}
+.video video{width:100%; height:100%; display:block; object-fit:contain; background:#fff}
+
+/* principle triad */
+.triad{display:grid; grid-template-columns:repeat(3, minmax(0,1fr)); gap:1px; background:var(--rule); border:1px solid var(--rule); border-radius:8px; overflow:hidden; margin:1.6rem 0 1.8rem}
+.triad > div{background:var(--bg); padding:1rem 1rem 1.1rem; min-width:0}
+.triad .verb{font-family:var(--f-display); font-weight:750; font-size:1.25rem; color:var(--accent); letter-spacing:-.01em}
+.triad p{font-size:.93rem; line-height:1.5; margin:.35rem 0 0}
+.triad .from{font-family:var(--f-mono); font-size:.72rem; color:var(--faint); margin-top:.6rem; display:block}
+@media (max-width:620px){ .triad{grid-template-columns:1fr} }
+
+/* comparison table */
+.tbl-wrap{overflow-x:auto; margin:1.4rem 0 1.6rem; -webkit-overflow-scrolling:touch}
+table{border-collapse:collapse; width:100%; font-size:.92rem; line-height:1.45}
+th, td{padding:.6rem .7rem; text-align:left; vertical-align:top; border-bottom:1px solid var(--rule)}
+thead th{font-family:var(--f-mono); font-weight:500; font-size:.72rem; letter-spacing:.08em; text-transform:uppercase; color:var(--muted); border-bottom:1.5px solid var(--fg); white-space:nowrap}
+td.num, th.num{text-align:right; font-variant-numeric:tabular-nums; font-family:var(--f-mono); font-size:.84rem; white-space:nowrap}
+tr.us td{background:var(--accent-soft)}
+tr.us td:first-child{font-weight:600}
+td .best{color:var(--accent); font-weight:600}
+td.gain{color:var(--accent); font-weight:500}
+tr.sub td{color:var(--muted); font-size:.82rem}
+.yes{color:var(--fg)} .no{color:var(--faint)}
+
+/* trajectory log */
+.traj{border:1px solid var(--rule); border-radius:8px; overflow:hidden; margin:1.8rem 0}
+.traj-head{display:flex; justify-content:space-between; gap:1rem; flex-wrap:wrap; padding:.65rem 1rem; background:var(--tint); border-bottom:1px solid var(--rule); font-family:var(--f-mono); font-size:.74rem; color:var(--muted)}
+.traj-row{display:grid; grid-template-columns:4.6rem minmax(0,1fr); gap:.8rem; padding:.7rem 1rem; border-bottom:1px solid var(--rule)}
+.traj-row:last-child{border-bottom:0}
+.traj-row .t{font-family:var(--f-mono); font-size:.76rem; color:var(--faint); padding-top:.12rem}
+.traj-row .c{min-width:0; font-size:.93rem; line-height:1.55}
+.call{font-family:var(--f-mono); font-size:.84rem; overflow-wrap:anywhere}
+.obs{display:inline-block; font-family:var(--f-mono); font-size:.72rem; padding:.12rem .45rem; border-radius:4px; margin-left:.35rem; vertical-align:1px}
+.obs.err{background:var(--accent-soft); color:var(--accent)}
+.obs.ok{background:var(--tint); color:var(--muted); border:1px solid var(--rule)}
+.traj-row.s{background:color-mix(in srgb, var(--accent-soft) 45%, var(--bg))}
+.tag{display:inline-block; font-family:var(--f-mono); font-size:.68rem; font-weight:500; letter-spacing:.1em; text-transform:uppercase; color:var(--accent); margin-right:.45rem}
+.lesson{display:block; font-family:var(--f-mono); font-size:.8rem; margin-top:.3rem; color:var(--fg)}
+.lesson .id{color:var(--accent); margin-right:.4rem}
+.lesson.dim{color:var(--faint)}
+blockquote.new{margin:.5rem 0 0; padding:.55rem .8rem; background:var(--bg); border:1px dashed color-mix(in srgb, var(--accent) 60%, transparent); border-radius:6px; font-size:.9rem; font-style:italic}
+
+/* insights */
+.insight{margin-top:3rem; padding-top:1.6rem; border-top:1px solid var(--rule)}
+.insight .eyebrow{font-family:var(--f-mono); font-size:.74rem; letter-spacing:.14em; text-transform:uppercase; color:var(--accent); margin-bottom:.5rem}
+.insight h3{margin-bottom:1rem}
+
+/* charts */
+.chart{margin:1.6rem 0 1.8rem; padding:1.1rem 1.1rem .9rem; background:var(--tint); border-radius:8px}
+.chart-title{font-family:var(--f-display); font-weight:650; font-size:.98rem; margin:0}
+.chart-sub{font-family:var(--f-mono); font-size:.72rem; color:var(--muted); margin:.2rem 0 0}
+.panels{display:grid; grid-template-columns:repeat(auto-fit, minmax(14rem, 1fr)); gap:1.4rem; margin-top:1rem}
+.panel{min-width:0}
+.panel-name{font-family:var(--f-mono); font-size:.74rem; color:var(--fg); margin-bottom:.4rem}
+.bars{display:flex; align-items:flex-end; gap:.5rem; height:11rem; border-bottom:1px solid var(--faint); position:relative}
+.bar{flex:1 1 0; min-width:0; display:flex; flex-direction:column; justify-content:flex-end; align-items:center; height:100%; position:relative; outline:none}
+.bar .v{font-family:var(--f-mono); font-size:.76rem; color:var(--fg); margin-bottom:.25rem; font-variant-numeric:tabular-nums; white-space:nowrap}
+.bar .m{width:100%; max-width:3.6rem; height:var(--h); background:var(--bar-base); border-radius:4px 4px 0 0; transition:filter .15s}
+.bar.mid .m{background:var(--bar-mid)}
+.bar.hi .m{background:var(--accent)}
+.bar.hi .v{color:var(--accent); font-weight:500}
+.bar:hover .m, .bar:focus-visible .m{filter:brightness(1.12)}
+.bar .tip{
+  position:absolute; bottom:calc(var(--h) + 1.9rem); left:50%; transform:translateX(-50%);
+  background:var(--fg); color:var(--bg); font-family:var(--f-mono); font-size:.7rem; line-height:1.35;
+  padding:.35rem .5rem; border-radius:4px; white-space:nowrap; pointer-events:none; opacity:0; transition:opacity .12s; z-index:2;
+}
+.bar:hover .tip, .bar:focus-visible .tip{opacity:1}
+.bar:first-child .tip{left:0; transform:none}
+.bar:last-child .tip{left:auto; right:0; transform:none}
+.chart{overflow:hidden}
+.ref-line{position:absolute; left:0; right:0; bottom:var(--h); border-top:1px dashed var(--accent); opacity:.7; pointer-events:none}
+.xl{display:flex; gap:.5rem; margin-top:.4rem}
+.xl span{flex:1 1 0; min-width:0; overflow-wrap:anywhere; text-align:center; font-family:var(--f-mono); font-size:.68rem; line-height:1.3; color:var(--muted)}
+.chart-note{font-size:.8rem; color:var(--muted); margin:.9rem 0 0; font-family:var(--f-mono); line-height:1.5}
+
+/* stacked fork bar */
+.stack{display:flex; height:2.2rem; gap:2px; border-radius:4px; overflow:hidden; margin-top:1rem}
+.stack div{display:flex; align-items:center; justify-content:center; font-family:var(--f-mono); font-size:.74rem; min-width:0; white-space:nowrap; overflow:hidden}
+.stack .better{background:var(--accent); color:#fff}
+.stack .tie{background:var(--bar-base); color:var(--fg)}
+.stack .worse{background:var(--bar-mid); color:var(--bg)}
+.legend{display:flex; flex-wrap:wrap; gap:.4rem 1.1rem; margin-top:.6rem; font-family:var(--f-mono); font-size:.72rem; color:var(--muted)}
+.legend i{display:inline-block; width:.7rem; height:.7rem; border-radius:2px; margin-right:.35rem; vertical-align:-1px}
+
+/* stats row */
+.stats{display:grid; grid-template-columns:repeat(auto-fit, minmax(10rem,1fr)); gap:1px; background:var(--rule); border:1px solid var(--rule); border-radius:8px; overflow:hidden; margin:1.4rem 0 1.6rem}
+.stats > div{background:var(--bg); padding:.9rem 1rem; min-width:0}
+.stats .n{font-family:var(--f-display); font-weight:750; font-size:1.7rem; letter-spacing:-.02em; line-height:1.1; font-variant-numeric:tabular-nums}
+.stats .n small{font-size:.55em; font-weight:650; color:var(--muted)}
+.stats .d{font-size:.83rem; color:var(--muted); line-height:1.4; margin-top:.25rem}
+
+/* code */
+pre{background:var(--code-bg); border:1px solid var(--rule); border-radius:8px; padding:1rem 1.1rem; overflow-x:auto; font-family:var(--f-mono); font-size:.8rem; line-height:1.6; margin:0}
+.code-box{position:relative; margin:1rem 0 1.4rem}
+.copy{position:absolute; top:.5rem; right:.5rem; font:500 .72rem/1 var(--f-mono); padding:.45rem .65rem; border-radius:6px; border:1px solid var(--rule); background:var(--bg); color:var(--fg); cursor:pointer}
+.copy:hover{border-color:var(--fg)}
+
+footer.end{margin-top:4rem; padding-top:1.4rem; border-top:1px solid var(--rule); display:flex; justify-content:space-between; gap:1rem; flex-wrap:wrap; font-family:var(--f-mono); font-size:.8rem; color:var(--muted)}
+footer.end a{text-decoration:none}
+footer.end a:hover{text-decoration:underline}
+
+.fn{font-size:.88rem; color:var(--muted)}
+.note{font-size:.95rem; color:var(--muted); background:var(--tint); border-radius:6px; padding:.7rem .9rem}
+.note strong{color:var(--fg)}
+</style>
+
+<div class="topbar">
+  <div class="topbar-in">
+    <div class="crumbs"><a href="https://nuglifeleoji.github.io/">Leo Ji</a><span class="sep">/</span><a href="https://nuglifeleoji.github.io/blog/">Blog</a><span class="sep">/</span><span>Sentry</span></div>
+  </div>
+</div>
+
+<main class="post" id="post">
+
+<header class="hero wrap" id="top">
+  <div class="date">Oct 14, 2026 · ~5 min read</div>
+  <div class="tags"><span>LLM agents</span><span>Failure detection and recovery</span><span>Self-evolving agents</span><span>Agent memory</span></div>
+  <h1>Failure knowledge is conditional knowledge</h1>
+
+  <div class="deck">
+    <p><b>Most work on recursive self-improvement focuses on getting useful knowledge into the agent.</b> A big part of that is failure experience, lessons from past mistakes that should help the agent do better next time. But we found that failure knowledge is actually "conditionally beneficial" for the agent. If it sits in the agent's main context, it can even distract the agent. And it only helps when the agent actually runs into the failure it describes.</p>
+    <p>Our framework, <a href="https://arxiv.org/abs/2610.02994">Sentry</a>, is built around this idea and helps agents learn from failures and recover from them at test time. It keeps failure knowledge outside the agent and only steps in when a failure actually happens.</p>
+    <p class="links"><a href="https://arxiv.org/abs/2610.02994">Paper (arXiv:2610.02994)</a><span>·</span><a href="https://github.com/nuglifeleoji/Sentry">Code</a><span>·</span><a href="https://x.com/Changxiu_leo_ji/status/2107153972859695222">Thread</a></p>
+  </div>
+
+  <div class="byline">
+    <div class="avatar" aria-hidden="true">LJ</div>
+    <div class="who"><span>By <a href="https://nuglifeleoji.github.io/">Changxiu (Leo) Ji</a></span><span>Stanford University</span></div>
+  </div>
+
+  <nav class="toc" aria-label="Contents">
+    <div class="label">Contents</div>
+    <ol>
+      <li><a href="#observation">Where our research starts</a></li>
+      <li><a href="#principle">The idea</a></li>
+      <li><a href="#trajectory">One run, step by step</a></li>
+      <li><a href="#holds">Main results</a></li>
+      <li><a href="#insights">Things We Learned</a></li>
+      <li><a href="#data">Paper and code</a></li>
+    </ol>
+  </nav>
+</header>
+
+<!-- 1 -->
+<section id="observation" class="wrap">
+  <h2>Where our research starts</h2>
+  <p>We ran a Qwen3.5-9B agent on WebShop with ACE, which keeps a playbook of advice learned from past tasks. However, overall, the agent did not perform as well as expected. We checked the playbook that the agent obtained, and they were all helpful entries, so what went wrong?</p>
+  <p>When we dived deeper into the traces of this, we discovered that even if this failure knowledge was correct, it can become a distraction, because the agent can apply the advice in the wrong situation, and distinguishing when and where to apply the failure advice is relatively difficult for the agent itself. Here is an example:</p>
+  <p>On one task the agent ran <code>search[women's pumps]</code> twenty times and got nothing. ACE wrote three rules from that: if nothing fits, broaden the query; if page 1 has no match, check later pages; if results are still off, refine the query.</p>
+  <p>A few tasks later, the agent is asked for 20-inch hair extensions under $80. The first result is a 20-inch extension for $79.63. The agent even says so: <em>"Item 1 fits the description perfectly. Let me also go through item 2, item 3, item 4 to make sure there is nothing better…"</em> It never buys anything. Reward 0.</p>
+  <p>Each rule was correct and helpful, but the agent couldn't tell that they didn't apply here, so "check later pages" turned into "keep looking."</p>
+
+  <figure class="wide">
+    <img src="assets/example_ace.png" alt="Context evolution (ACE). Earlier task 6594: the agent repeats search[women's pumps] 20 times, gets irrelevant results and reward 0. ACE learns three recovery rules and injects them into the agent's context before the next task. Later task 4494: the user asks for 20-inch hair extensions under $80; the first search result is a 20-inch extension at $79.63 that fits. The agent says item 1 fits perfectly but goes on to check items 2, 3 and 4, takes no action, and gets reward 0. The correct action, click on the item, is never taken." width="1284" height="908" loading="lazy">
+    <figcaption><b>Figure 1.</b> Context evolution (ACE), Qwen3.5-9B on WebShop. Rules learned from task 6594 stay in the agent's context for task 4494. The agent finds a matching item but keeps comparing and never acts.</figcaption>
+  </figure>
+  <p>Then we turned to another line of methods, runtime intervention methods. These methods try to monitor agent failures and give guidance when failure happens. But they have the opposite problem. Their advice is too generic, they fix their recovery and detection strategies across different tasks, and some of these monitors' diagnoses are simply wrong.</p>
+  <p>For example, on one WebShop task, AgentGuard warns "no progress" whenever the page doesn't change. Sometimes that advice can help the agent break a real search loop. Other times the page doesn't change because the agent is picking a size and color, which is fine. The warning fires anyway, the agent leaves the page, and the options are gone. In this example, a fixed strategy cannot help the agent recover from its failures.</p>
+
+  <figure class="wide">
+    <img src="assets/example_agentguard.png" alt="Runtime intervention (AgentGuard) with the fixed rule: page unchanged for n steps, warn no progress. Earlier task 3980: the agent repeats identical searches, the warning is correct, the agent selects options and buys, reward 1.0; AgentGuard stores no lesson from this rescue. Later task 4585: the agent selects mossy oak country and large, the product page is unchanged but both options are registered; the same warning fires wrongly, the agent goes back, reopens the product and buys with no options, reward 0.6." width="1286" height="906" loading="lazy">
+    <figcaption><b>Figure 2.</b> Runtime intervention (AgentGuard), Qwen3.5-9B on WebShop. The fixed "no progress" warning rescues task 3980, but no lesson is stored. In task 4585 the same warning fires after valid option selections, and the agent buys the item without its options.</figcaption>
+  </figure>
+</section>
+
+<!-- 3 -->
+<section id="principle" class="wrap">
+  <h2>The idea</h2>
+  <div class="thesis">Failure knowledge is conditional knowledge and should be <span class="hl">conditionally exposed</span>.</div>
+  <p>In practice, a failure lesson should be:</p>
+
+  <div class="triad">
+    <div><div class="verb">Learned</div>
+      <p>Kept across tasks, so a fix that worked once can be reused.</p>
+      <span class="from">like context evolution</span></div>
+    <div><div class="verb">Surfaced</div>
+      <p>Showing up only when corresponding failures occur.</p>
+      <span class="from">like runtime intervention</span></div>
+    <div><div class="verb">Admitted</div>
+      <p>Saved only if the fix worked. A lesson from a failed fix will misfire later too.</p>
+      <span class="from">neither does this</span></div>
+  </div>
+
+  <p>We introduce Sentry (Figure 3), a failure-management layer that runs alongside the task agent and handles failure knowledge along these three properties: it surfaces recovery lessons only when it diagnoses a failure, admits a lesson only after verifying the recovery, and learns by accumulating verified lessons across tasks. The complete playbook is maintained outside the agent's persistent background context; we refer to this as <strong>isolation</strong>. Isolation does not hide recovery knowledge from the agent: the few entries retrieved for a detected failure still enter the conversation during that intervention.</p>
+  <p>During execution, Sentry monitors the agent's recent trajectory. It routes invalid actions to <strong>hard repair</strong>, which asks the task agent for a valid replacement action, and routes progress and reasoning–grounding failures to <strong>soft repair</strong>, which combines the local diagnosis with relevant playbook entries to guide the agent's next step. After a soft repair, Sentry verifies whether the triggering failure has been resolved and adds only verified recovery lessons to the playbook for later interventions.</p>
+
+  <figure class="wide">
+    <img src="assets/sentry_design.png" alt="Sentry architecture: the task agent's recent context window feeds an action-validity check. Invalid actions go to Hard Repair. Valid actions go to a Failure Detector that routes progress failures and reasoning and grounding failures to soft repair, which retrieves matching entries from the playbook by label. A verifier checks later steps and, if the problem is solved, updates the playbook." width="1600" height="963" loading="lazy">
+    <figcaption><b>Figure 3.</b> Sentry's loop. Hard repairs are checked right away, soft repairs after H steps. Only soft repairs that worked become playbook entries.</figcaption>
+  </figure>
+</section>
+
+<!-- 4 -->
+<section id="trajectory" class="wrap">
+  <h2>One run, step by step</h2>
+  <p>This is a recorded AppWorld run with GPT-4.1 as the agent. The task: build a new Spotify playlist from songs in five existing ones. The agent starts calling account APIs before logging in.</p>
+
+  <figure class="wide">
+    <div class="video"><video controls muted playsinline preload="metadata" poster="assets/demo_poster.jpg" aria-label="Sentry demo video, 2 minutes 35 seconds">
+      <source src="assets/sentry_demo.mp4" type="video/mp4">
+    </video></div>
+    <figcaption><b>Demo.</b> 2.5 minutes: detect, retrieve, verify, then results. Starts muted.</figcaption>
+  </figure>
+
+  <div class="traj" role="table" aria-label="Annotated trajectory">
+    <div class="traj-head"><span>AppWorld · Spotify · recorded run</span><span>agent steps and Sentry events</span></div>
+    <div class="traj-row" role="row"><div class="t">step 1</div><div class="c"><span class="call">apis.spotify.show_account()</span><span class="obs err">401 Unauthorized</span></div></div>
+    <div class="traj-row s" role="row"><div class="t">sentry</div><div class="c">
+      <span class="tag">detect</span>The call is well-formed, so no hard repair. But the agent isn't getting anywhere. Diagnosis: <code>planning_stall</code>.
+      <span class="lesson"><span class="id">P1</span>Don't repeat an unchanged request</span>
+      <span class="lesson"><span class="id">P2</span>Stop exploring; take the justified step</span>
+      <span class="lesson dim"><span class="id">P3</span>Check docs before assuming a value · not retrieved</span>
+      <span class="fn" style="display:block;margin-top:.35rem">Two of three entries match and go into the soft-repair prompt.</span>
+    </div></div>
+    <div class="traj-row" role="row"><div class="t">step 4</div><div class="c"><span class="call">apis.spotify.login(email=…)</span><span class="obs err">422 Invalid arguments</span>
+      <div style="margin-top:.3rem"><span class="tag">hard repair</span>Sentry asks for the login call again, matching the schema.</div></div></div>
+    <div class="traj-row" role="row"><div class="t">step 6</div><div class="c"><span class="obs ok">logged in</span></div></div>
+    <div class="traj-row" role="row"><div class="t">step 8</div><div class="c"><span class="obs err">no token</span> <span class="fn">Later calls still leave out the access token.</span></div></div>
+    <div class="traj-row" role="row"><div class="t">9 – 11</div><div class="c"><span class="obs ok">token passed ✓</span> <span class="fn">The loop is over.</span></div></div>
+    <div class="traj-row s" role="row"><div class="t">sentry</div><div class="c">
+      <span class="tag">verify</span>The verifier sees the trigger and the next 10 steps. No reward, no success label. It marks the failure resolved.
+      <div style="margin-top:.45rem"><span class="tag">learn</span>Sentry writes P4. The playbook goes from 3 to 4 entries.</div>
+      <blockquote class="new"><span class="mono" style="font-style:normal;color:var(--accent)">P4 · </span>When an authentication or authorization error is detected, inspect the API docs for required auth parameters, obtain or refresh credentials, and retry with proper authentication before proceeding.</blockquote>
+    </div></div>
+    <div class="traj-row" role="row"><div class="t">end</div><div class="c"><span class="obs ok">7 / 7 official checks passed</span></div></div>
+  </div>
+
+</section>
+
+<!-- 6 -->
+<section id="holds" class="wrap">
+  <h2>Main results</h2>
+  <p>Against runtime-intervention baselines, with Sentry starting from an empty playbook, Sentry wins on all four benchmarks. It's 37% better on average than the best baseline for each benchmark, and 77% better on WebShop. The runner-up is a different method on every benchmark.</p>
+
+  <div class="tbl-wrap">
+    <table>
+      <thead><tr><th>Method</th><th class="num">WebShop<br>reward</th><th class="num">AppWorld<br>test pass %</th><th class="num">SWE-bench Lite<br>accuracy</th><th class="num">Mind2Web Replay<br>completion</th></tr></thead>
+      <tbody>
+        <tr><td>Base agent</td><td class="num">0.170</td><td class="num">25.59</td><td class="num">0.20</td><td class="num">0.420</td></tr>
+        <tr><td>AgentGuard</td><td class="num">0.258</td><td class="num">25.09</td><td class="num">0.22</td><td class="num">0.450</td></tr>
+        <tr><td>AgentForesight</td><td class="num">0.168</td><td class="num">24.17</td><td class="num">0.24</td><td class="num">0.430</td></tr>
+        <tr><td>AgentFixer</td><td class="num">0.171</td><td class="num">26.69</td><td class="num">0.22</td><td class="num">0.687</td></tr>
+        <tr><td>Wink</td><td class="num">0.264</td><td class="num">27.56</td><td class="num">0.18</td><td class="num">0.370</td></tr>
+        <tr class="us"><td>Sentry</td><td class="num">0.468</td><td class="num">38.53</td><td class="num">0.30</td><td class="num">0.736</td></tr>
+        <tr class="sub"><td>gain over best baseline</td><td class="num gain">+77.3%</td><td class="num gain">+39.8%</td><td class="num gain">+25.0%</td><td class="num gain">+7.1%</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <p>On held-out tasks, Sentry beats ACE by 48% on WebShop and 30% on Mind2Web Replay. Reflexion, AWM, and ReasoningBank all score below ACE. Even with the playbook frozen during evaluation, Sentry does better than with retrieval off (0.251 → 0.364 and 0.533 → 0.651), so the lessons carry over to new tasks.</p>
+  <p>The gains aren't just from fixing malformed calls. Without hard repair, Sentry still beats every runtime-intervention baseline on both benchmarks we tested. With GPT-OSS-120B instead of Qwen, it's still the best method, 51% above the top baseline on average.</p>
+
+  <div class="stats">
+    <div><div class="n">81.7<small>%</small></div><div class="d">of 939 detected failures fixed</div></div>
+    <div><div class="n">86.0<small>%</small></div><div class="d">human agreement on when to step in</div></div>
+    <div><div class="n">1.54<small>×</small></div><div class="d">tokens vs. the base agent (AgentForesight: 2.44×)</div></div>
+    <div><div class="n">−31.7<small>s</small></div><div class="d">per task on SWE-bench Lite (−45.6 s on AppWorld)</div></div>
+  </div>
+
+  <div class="chart" role="figure" aria-label="Chart: paired fork outcomes at 200 checkpoints">
+    <p class="chart-title">Paired forks at 200 intervention points</p>
+    <p class="chart-sub">final task score, Sentry branch vs. unaided branch from the same state</p>
+    <div class="stack" aria-hidden="true">
+      <div class="better" style="flex:74" title="Sentry branch higher: 74">74</div>
+      <div class="tie" style="flex:101" title="Tied: 101">101</div>
+      <div class="worse" style="flex:25" title="Unaided branch higher: 25">25</div>
+    </div>
+    <div class="legend"><span><i style="background:var(--accent)"></i>Sentry higher · 74</span><span><i style="background:var(--bar-base)"></i>tie · 101</span><span><i style="background:var(--bar-mid)"></i>unaided higher · 25</span></div>
+    <p class="chart-note">Local recovery after 10 steps: 33.5% unaided, 60.5% with Sentry. Paper Table 11.</p>
+  </div>
+
+</section>
+
+<!-- 5 -->
+<section id="insights" class="wrap">
+  <h2>Things We Learned</h2>
+
+  <!-- insight 1 -->
+  <div class="insight">
+    <div class="eyebrow">Insight 1</div>
+    <h3>Where a lesson lives matters as much as what it says</h3>
+    <p>We first deleted the failure lessons from the ACE playbook entirely, and the scores even went up on both benchmarks, which means that these lessons hurt more on average when they are situated in the agent's main context.</p>
+    <p>However, deleting these failure lessons also throws the valuable reflections on failure away, so we changed the setting to conditionally retrieving them. Two Sentry variants share the same frozen playbook, detector, and retrieval. One also puts the whole playbook in the agent's context. It still gets the right lessons on demand, and it still does worse. These experiments tell us that the lesson should live conditionally, and conditionality matters as much as its quality.</p>
+    <div class="chart" role="figure" aria-label="Chart: effect of exposure on held-out performance">
+      <p class="chart-title">Same lessons, different exposure</p>
+      <p class="chart-sub">held-out · WebShop avg. reward / Mind2Web Replay completion</p>
+      <div class="panels">
+        <div class="panel"><div class="panel-name">(a) Remove ACE's failure lessons · WebShop</div>
+          <div class="bars">
+            <div class="bar mid" tabindex="0" style="--h:47.9%"><span class="tip">ACE · 0.335</span><span class="v">0.335</span><div class="m"></div></div>
+            <div class="bar hi" tabindex="0" style="--h:55.9%"><span class="tip">ACE w/o failure lessons · 0.391</span><span class="v">0.391</span><div class="m"></div></div>
+          </div><div class="xl"><span>ACE</span><span>ACE, failure lessons removed</span></div></div>
+        <div class="panel"><div class="panel-name">(a) Remove ACE's failure lessons · Mind2Web</div>
+          <div class="bars">
+            <div class="bar mid" tabindex="0" style="--h:62.4%"><span class="tip">ACE · 0.562</span><span class="v">0.562</span><div class="m"></div></div>
+            <div class="bar hi" tabindex="0" style="--h:71.4%"><span class="tip">ACE w/o failure lessons · 0.643</span><span class="v">0.643</span><div class="m"></div></div>
+          </div><div class="xl"><span>ACE</span><span>ACE, failure lessons removed</span></div></div>
+        <div class="panel"><div class="panel-name">(b) Frozen playbook · WebShop</div>
+          <div class="bars">
+            <div class="bar hi" tabindex="0" style="--h:52%"><span class="tip">On demand only · 0.364 ± 0.019</span><span class="v">0.364</span><div class="m"></div></div>
+            <div class="bar mid" tabindex="0" style="--h:42.3%"><span class="tip">+ persistent exposure · 0.296 ± 0.017</span><span class="v">0.296</span><div class="m"></div></div>
+          </div><div class="xl"><span>on demand only</span><span>+ full playbook in context</span></div></div>
+        <div class="panel"><div class="panel-name">(b) Frozen playbook · Mind2Web</div>
+          <div class="bars">
+            <div class="bar hi" tabindex="0" style="--h:72.3%"><span class="tip">On demand only · 0.651 ± 0.023</span><span class="v">0.651</span><div class="m"></div></div>
+            <div class="bar mid" tabindex="0" style="--h:66.6%"><span class="tip">+ persistent exposure · 0.599 ± 0.018</span><span class="v">0.599</span><div class="m"></div></div>
+          </div><div class="xl"><span>on demand only</span><span>+ full playbook in context</span></div></div>
+      </div>
+      <p class="chart-note">Scales: WebShop 0–0.7, Mind2Web 0–0.9. Paper §2 and Table 4.</p>
+    </div>
+  </div>
+
+  <!-- insight 2 -->
+  <div class="insight">
+    <div class="eyebrow">Insight 2</div>
+    <h3>Knowing when to intervene is important</h3>
+    <p>Of everything we ablated, the check for whether to intervene at all mattered most. Removing it cut performance by 55% on average across WebShop and AppWorld. On WebShop, a Sentry that steps in every time does worse than no Sentry. Always intervening will frequently disrupt the agent's reasoning progress, causing it to get confused and change its behavior, which will cause worse performance.</p>
+    <div class="chart" role="figure" aria-label="Chart: always intervening versus gated intervention on WebShop">
+      <p class="chart-title">Intervening every step is worse than not intervening</p>
+      <p class="chart-sub">online from scratch · WebShop avg. reward</p>
+      <div class="panels" style="grid-template-columns:minmax(0,1fr)">
+        <div class="panel">
+          <div class="bars" style="max-width:26rem">
+            <div class="ref-line" style="--h:28.3%"></div>
+            <div class="bar" tabindex="0" style="--h:28.3%"><span class="tip">Base agent · 0.170 ± 0.016</span><span class="v">0.170</span><div class="m"></div></div>
+            <div class="bar mid" tabindex="0" style="--h:22.7%"><span class="tip">Sentry w/o intervention-need check · 0.136</span><span class="v">0.136</span><div class="m"></div></div>
+            <div class="bar hi" tabindex="0" style="--h:78%"><span class="tip">Sentry (gated) · 0.468 ± 0.017</span><span class="v">0.468</span><div class="m"></div></div>
+          </div>
+          <div class="xl" style="max-width:26rem"><span>base agent</span><span>Sentry, always intervening</span><span>Sentry, gated</span></div>
+        </div>
+      </div>
+      <p class="chart-note">Scale 0–0.6. Dashed line: base agent. Paper Table 3.</p>
+    </div>
+  </div>
+
+  <!-- insight 3 -->
+  <div class="insight">
+    <div class="eyebrow">Insight 3</div>
+    <h3>Right lesson &gt; More lessons</h3>
+    <p>With everything else fixed, we changed the retrieval of these lessons, and we discovered that the closer the guidance matches the diagnosed failure, the better performance the agent achieves. We retrieve the top k entries from the playbook with the same failure label and the same failure type. Even when you have the right diagnosis, it is important to use the right entries that can actually help with the problem, as we see that random retrieval degrades performance because it will often mislead the agent.</p>
+    <div class="chart" role="figure" aria-label="Chart: retrieval rule versus WebShop reward">
+      <p class="chart-title">How lessons are picked</p>
+      <p class="chart-sub">held-out · WebShop avg. reward</p>
+      <div class="panels" style="grid-template-columns:minmax(0,1fr)">
+        <div class="panel">
+          <div class="bars">
+            <div class="bar" tabindex="0" style="--h:55%"><span class="tip">Random · 0.33 ± 0.03</span><span class="v">0.33</span><div class="m"></div></div>
+            <div class="bar" tabindex="0" style="--h:65%"><span class="tip">Unfiltered · 0.39 ± 0.01</span><span class="v">0.39</span><div class="m"></div></div>
+            <div class="bar mid" tabindex="0" style="--h:71.7%"><span class="tip">Failure type only · 0.43 ± 0.01</span><span class="v">0.43</span><div class="m"></div></div>
+            <div class="bar mid" tabindex="0" style="--h:78.3%"><span class="tip">Type + label, k=3 · 0.47 ± 0.01</span><span class="v">0.47</span><div class="m"></div></div>
+            <div class="bar hi" tabindex="0" style="--h:83.3%"><span class="tip">Type + label, k=5 · 0.50 ± 0.02</span><span class="v">0.50</span><div class="m"></div></div>
+            <div class="bar mid" tabindex="0" style="--h:76.7%"><span class="tip">Type + label, k=10 · 0.46 ± 0.02</span><span class="v">0.46</span><div class="m"></div></div>
+          </div>
+          <div class="xl"><span>random</span><span>whole playbook</span><span>same type</span><span>label k=3</span><span>label k=5</span><span>label k=10</span></div>
+        </div>
+      </div>
+      <p class="chart-note">"label" = same failure type plus at least one shared label. Scale 0–0.6. Mind2Web Replay follows the same order: 0.55 / 0.61 / 0.66 / 0.70 / 0.73 / 0.69. Paper Table 14.</p>
+    </div>
+  </div>
+
+  <!-- insight 4 -->
+  <div class="insight">
+    <div class="eyebrow">Insight 4</div>
+    <h3>Task-level and failure-level learning are complementary</h3>
+    <p>ACE provides task-level knowledge before execution; Sentry supplies failure-specific guidance when something goes wrong. Their playbooks remain separate.</p>
+    <p>The combination performs best among the evaluated methods on both benchmarks, suggesting that task-level and failure-level learning address different needs and work better together.</p>
+    <div class="chart" role="figure" aria-label="Chart: ACE, Sentry, and ACE plus Sentry on held-out tasks">
+      <p class="chart-title">ACE and Sentry together</p>
+      <p class="chart-sub">held-out · WebShop avg. reward / Mind2Web Replay completion</p>
+      <div class="panels">
+        <div class="panel"><div class="panel-name">WebShop</div>
+          <div class="bars">
+            <div class="bar" tabindex="0" style="--h:26.6%"><span class="tip">Base agent · 0.186 ± 0.014</span><span class="v">0.186</span><div class="m"></div></div>
+            <div class="bar mid" tabindex="0" style="--h:47.9%"><span class="tip">ACE · 0.335 ± 0.019</span><span class="v">0.335</span><div class="m"></div></div>
+            <div class="bar mid" tabindex="0" style="--h:70.7%"><span class="tip">Sentry · 0.495 ± 0.017</span><span class="v">0.495</span><div class="m"></div></div>
+            <div class="bar hi" tabindex="0" style="--h:79.3%"><span class="tip">ACE + Sentry · 0.555 ± 0.027</span><span class="v">0.555</span><div class="m"></div></div>
+          </div><div class="xl"><span>base</span><span>ACE</span><span>Sentry</span><span>ACE + Sentry</span></div></div>
+        <div class="panel"><div class="panel-name">Mind2Web Replay</div>
+          <div class="bars">
+            <div class="bar" tabindex="0" style="--h:46.8%"><span class="tip">Base agent · 0.421 ± 0.026</span><span class="v">0.421</span><div class="m"></div></div>
+            <div class="bar mid" tabindex="0" style="--h:62.4%"><span class="tip">ACE · 0.562 ± 0.020</span><span class="v">0.562</span><div class="m"></div></div>
+            <div class="bar mid" tabindex="0" style="--h:81%"><span class="tip">Sentry · 0.729 ± 0.019</span><span class="v">0.729</span><div class="m"></div></div>
+            <div class="bar hi" tabindex="0" style="--h:87.7%"><span class="tip">ACE + Sentry · 0.789 ± 0.022</span><span class="v">0.789</span><div class="m"></div></div>
+          </div><div class="xl"><span>base</span><span>ACE</span><span>Sentry</span><span>ACE + Sentry</span></div></div>
+      </div>
+      <p class="chart-note">Scales: WebShop 0–0.7, Mind2Web 0–0.9. Paper Table 2.</p>
+    </div>
+  </div>
+</section>
+
+<!-- 9 -->
+<section id="data" class="wrap">
+  <h2>Paper and code</h2>
+  <p>This post is based on our paper, <a href="https://arxiv.org/abs/2610.02994"><em>Sentry: Learning to Recover from LLM Agent Failures at Test Time</em></a>. The paper has the full method, prompts, more ablations, and an example playbook.</p>
+  <p>The code is open source at <a href="https://github.com/nuglifeleoji/Sentry">github.com/nuglifeleoji/Sentry</a>. If your agents keep getting stuck, give it a try. Stars, issues, and PRs are all welcome. There is also a short <a href="https://x.com/Changxiu_leo_ji/status/2107153972859695222">thread on X</a> with the demo video.</p>
+  <p>Sentry is joint work with <strong>Amy Lu</strong> (equal contribution), <strong>Qizheng Zhang</strong>, and <strong>Kunle Olukotun</strong> at Stanford. Huge thanks to them as well as the Stanford Pervasive Parallelism Lab.</p>
+
+  <div class="label" style="margin-top:1.6rem">Citation</div>
+  <div class="code-box">
+    <button type="button" class="copy" id="copy-bib">Copy</button>
+<pre id="bib">@article{ji2026sentry,
+  title   = {Sentry: Learning to Recover from LLM Agent Failures at Test Time},
+  author  = {Ji, Changxiu and Lu, Amy and Zhang, Qizheng and Olukotun, Kunle},
+  journal = {arXiv preprint arXiv:2610.02994},
+  year    = {2026}
+}</pre>
+  </div>
+  <p class="fn">Questions or feedback: <span class="mono" style="user-select:all">leo0610@stanford.edu</span></p>
+
+  <footer class="end">
+    <a href="https://nuglifeleoji.github.io/blog/">← All posts</a>
+    <a href="#top">Back to top ↑</a>
+  </footer>
+</section>
+
+</main>
+
+<script>
+(function(){
+  var copyBtn = document.getElementById('copy-bib');
+  var bib = document.getElementById('bib');
+  copyBtn.addEventListener('click', function(){
+    var text = bib.textContent;
+    function selectFallback(){
+      var r = document.createRange(); r.selectNodeContents(bib);
+      var s = window.getSelection(); s.removeAllRanges(); s.addRange(r);
+      copyBtn.textContent = 'Selected';
+      setTimeout(function(){ copyBtn.textContent = 'Copy'; }, 1600);
+    }
+    try {
+      navigator.clipboard.writeText(text).then(function(){
+        copyBtn.textContent = 'Copied';
+        setTimeout(function(){ copyBtn.textContent = 'Copy'; }, 1600);
+      }, selectFallback);
+    } catch(e) { selectFallback(); }
+  });
+})();
+</script>

@@ -209,6 +209,7 @@ kramdown:
 # Includes & excludes
 include: ["_pages"]
 exclude:
+  - blog asset/ # Original article artwork; published copies live in assets/img/blog/.
   - sentry-blog-post.html # Original writing draft; published version lives in _posts/.
   - sentry-blog-assets.zip # Source archive; extracted media are served from assets/.
   - al-folio-upgrade-report.md

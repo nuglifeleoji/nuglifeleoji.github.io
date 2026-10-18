@@ -1,0 +1,24 @@
+/* Only details specific to the Autoresearch article; layout is shared with Sentry. */
+.research-post .research-body {
+  margin-top: 2.5rem;
+}
+
+.research-post math {
+  margin-inline: 0.12em;
+  font-size: 1em;
+}
+
+.research-post #references p {
+  font-size: 1rem;
+  overflow-wrap: anywhere;
+}
+
+.research-post .code-box pre {
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+
+.research-post .code-box code {
+  padding: 0;
+  font-size: inherit;
+}
