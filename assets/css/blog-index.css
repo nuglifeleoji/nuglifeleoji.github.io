@@ -27,6 +27,11 @@ html[data-theme="dark"] .blog-index {
   grid-template-areas: "title" "description" "meta";
 }
 
+.blog-index .blog-entry--paired-covers {
+  grid-template-columns: minmax(0, 1fr);
+  grid-template-areas: "title" "description" "cover" "meta";
+}
+
 .blog-index .blog-entry-title {
   grid-area: title;
   margin: 0;
@@ -123,6 +128,22 @@ html[data-theme="dark"] .blog-index {
   display: block;
   width: 100%;
   height: auto;
+}
+
+.blog-index .blog-entry-covers {
+  grid-area: cover;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1.25rem;
+}
+
+.blog-index .blog-entry-covers .blog-entry-cover {
+  grid-area: auto;
+}
+
+.blog-index .blog-entry-covers img {
+  aspect-ratio: 2 / 1;
+  object-fit: contain;
 }
 
 .blog-index a:focus-visible {

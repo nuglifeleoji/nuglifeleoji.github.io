@@ -9,26 +9,43 @@ nav_order: 3
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Merriweather:wght@700&family=Open+Sans:wght@400;600&display=swap" />
-<link rel="stylesheet" href="{{ '/assets/css/blog-index.css' | relative_url }}" />
+<link rel="stylesheet" href="{{ '/assets/css/blog-index.css' | relative_url }}?v=20261018-paired-covers" />
 
 <div class="blog-index">
-  {% for post in site.posts %} {% assign cover_file = site.static_files | where: 'path', post.cover | first %}
-  <article class="blog-entry{% unless cover_file %} blog-entry--text-only{% endunless %}" aria-labelledby="blog-title-{{ forloop.index }}">
+  {% for post in site.posts %} {% assign cover_file = site.static_files | where: 'path', post.cover | first %} {% assign secondary_cover_file = nil %}
+  {% if post.secondary_cover %}{% assign secondary_cover_file = site.static_files | where: 'path', post.secondary_cover | first %}{% endif %}
+  <article
+    class="blog-entry{% unless cover_file %} blog-entry--text-only{% endunless %}{% if cover_file and secondary_cover_file %} blog-entry--paired-covers{% endif %}"
+    aria-labelledby="blog-title-{{ forloop.index }}"
+  >
     <h2 class="blog-entry-title" id="blog-title-{{ forloop.index }}">
       <a href="{{ post.url | relative_url }}">{{ post.title }}</a>
     </h2>
     <p class="blog-entry-description">{{ post.description }}</p>
-    {% if cover_file %}
-    <a class="blog-entry-cover" href="{{ post.url | relative_url }}" aria-label="Read {{ post.title | escape }}">
-      <img
-        src="{{ post.cover | relative_url }}"
-        alt="{{ post.cover_alt | escape }}"
-        width="{{ post.cover_width }}"
-        height="{{ post.cover_height }}"
-        decoding="async"
-      />
-    </a>
-    {% endif %}
+    {% if cover_file %} {% if secondary_cover_file %}
+    <div class="blog-entry-covers">
+      {% endif %}
+      <a class="blog-entry-cover" href="{{ post.url | relative_url }}" aria-label="Read {{ post.title | escape }}">
+        <img
+          src="{{ post.cover | relative_url }}"
+          alt="{{ post.cover_alt | escape }}"
+          width="{{ post.cover_width }}"
+          height="{{ post.cover_height }}"
+          decoding="async"
+        />
+      </a>
+      {% if secondary_cover_file %}
+      <a class="blog-entry-cover" href="{{ post.url | relative_url }}" aria-label="Read {{ post.title | escape }}">
+        <img
+          src="{{ post.secondary_cover | relative_url }}"
+          alt="{{ post.secondary_cover_alt | escape }}"
+          width="{{ post.secondary_cover_width }}"
+          height="{{ post.secondary_cover_height }}"
+          decoding="async"
+        />
+      </a>
+    </div>
+    {% endif %} {% endif %}
     <div class="blog-entry-meta">
       <span class="blog-entry-date">
         {% if post.reading_time %}<span>{{ post.reading_time }} min read</span><span aria-hidden="true">·</span>{% endif %}

@@ -8,6 +8,7 @@
 - The Sentry header uses `paper_authors` and `affiliation` for the byline; `equal_contribution: true` adds an asterisk beside a name. Both articles keep Contents on the left at widths of 768 px and above, and collapse it above the article on phones. An All posts link above Contents leads back to `/blog/`.
 - Shared article styles: `assets/css/blog-post.css`; list styles: `assets/css/blog-index.css`.
 - The list uses the article's `tags` and `categories` for clickable archive links. The `cover` appears on the list only; article figures stay within the reading column and link to their full-size originals.
+- Autoresearch's list entry keeps the subtitle on its own row, followed by Figure 1 and Figure 5 side by side. The optional `secondary_cover`, `secondary_cover_width`, `secondary_cover_height`, and `secondary_cover_alt` front-matter fields enable this layout for that entry; other entries keep their original layout.
 - `sentry-blog-post.html` is the original writing draft, retained unchanged and excluded from the built site.
 
 The Sentry article uses these assets:
