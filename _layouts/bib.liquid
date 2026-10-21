@@ -84,7 +84,11 @@
         {%- assign venue_includes_year = true -%}
       {%- endif -%}
       {%- if entry.status -%}
-        {{ entry.status | escape }}
+        {%- assign status_parts = entry.status | split: '; ' -%}
+        {%- for status_part in status_parts -%}
+          {%- unless forloop.first -%}<br>{%- endunless -%}
+          {{ status_part | escape -}}
+        {%- endfor -%}
       {%- elsif venue_text != '' -%}
         {%- assign venue_parts = venue_text | split: '; ' -%}
         {%- for venue_part in venue_parts -%}
