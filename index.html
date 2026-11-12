@@ -294,7 +294,57 @@
     new ResizeObserver(update).observe(track);
     update();
   })();
-</script> </div> </article> </div> </div> <footer class="fixed-bottom" role="contentinfo"> <div class="container mt-0"> © Copyright 2026 Changxiu (Leo) Ji. Built with <a href="https://jekyllrb.com/" target="_blank" rel="external nofollow noopener">Jekyll</a> and <a href="https://github.com/alshedivat/al-folio" rel="external nofollow noopener" target="_blank">al-folio</a>. </div> </footer> <script>
+</script> </div> <style>
+  .home-news {
+    clear: both;
+    margin: 2.5rem 0 1.5rem;
+  }
+
+  .home-news h2 {
+    margin: 0 0 1rem;
+    font-size: 1.65rem;
+    font-weight: 400;
+  }
+
+  .home-news-list {
+    margin: 0;
+    padding-left: 1.5rem;
+    font-size: 1rem;
+    line-height: 1.8;
+  }
+
+  .home-news-list li + li {
+    margin-top: 0.55rem;
+  }
+
+  .home-news-date {
+    white-space: nowrap;
+  }
+
+  .home-news-content,
+  .home-news-content p {
+    display: inline;
+    margin: 0;
+  }
+
+  .home-news-content a {
+    overflow-wrap: anywhere;
+  }
+
+  .home-news-empty {
+    color: var(--global-text-color-light);
+  }
+
+  @media (max-width: 575px) {
+    .home-news {
+      margin-top: 2rem;
+    }
+
+    .home-news h2 {
+      font-size: 1.5rem;
+    }
+  }
+</style> <section class="home-news" id="news" aria-labelledby="news-heading"> <h2 id="news-heading">News</h2> <p class="home-news-empty">Updates coming soon.</p> </section> </article> </div> </div> <footer class="fixed-bottom" role="contentinfo"> <div class="container mt-0"> © Copyright 2026 Changxiu (Leo) Ji. Built with <a href="https://jekyllrb.com/" target="_blank" rel="external nofollow noopener">Jekyll</a> and <a href="https://github.com/alshedivat/al-folio" rel="external nofollow noopener" target="_blank">al-folio</a>. </div> </footer> <script>
   window.alFolio = {
     compatBootstrap: false
   };
